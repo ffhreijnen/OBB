@@ -5,7 +5,7 @@ end
 uncontrollable u_r2, u_r2Off;
 
 group def VTLCommands():
-    uncontrollable u_red, u_green, u_redRed, u_r2Off;
+    uncontrollable u_red, u_green;
 end
 
 CommandVTL12 : VTLCommands();
