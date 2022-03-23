@@ -2210,234 +2210,234 @@ group sup:
   alg bool emergency = EmergencyStop.Active or BD.NotDecelerating or BD.UndesiredClosed;
   group Beveiligingen:
     group VF2:
-      requirement invariant .BB1.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
-      requirement invariant .BB2.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
+      supervisor invariant .BB1.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
+      supervisor invariant .BB2.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
     end
     group VF4:
-      requirement invariant .LM.Pump.c_on needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .BD.Motor.c_on needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .BR.Actuator.c_release needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .LM.Valve.c_lock needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .LM.Valve.c_unlock needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .BD.Direction.c_open needs BB1.Closed.On and BB2.Closed.On;
-      requirement invariant .BD.Direction.c_close needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .LM.Pump.c_on needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Motor.c_on needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BR.Actuator.c_release needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .LM.Valve.c_lock needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .LM.Valve.c_unlock needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Direction.c_open needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Direction.c_close needs BB1.Closed.On and BB2.Closed.On;
     end
     group VF5:
-      requirement invariant .VTL1.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL2.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL3.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL4.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL5.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL6.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL7.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
-      requirement invariant .VTL8.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL1.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL2.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL3.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL4.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL5.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL6.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL7.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL8.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
     end
     group VF6A:
-      requirement invariant .VTL3.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
-      requirement invariant .VTL4.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
-      requirement invariant .VTL3.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
-      requirement invariant .VTL4.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
+      supervisor invariant .VTL3.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
+      supervisor invariant .VTL4.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
+      supervisor invariant .VTL3.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
+      supervisor invariant .VTL4.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
     end
     group VF6B:
-      requirement invariant .VTL1.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
-      requirement invariant .VTL2.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
-      requirement invariant .VTL1.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
-      requirement invariant .VTL2.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
+      supervisor invariant .VTL1.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
+      supervisor invariant .VTL2.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
+      supervisor invariant .VTL1.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
+      supervisor invariant .VTL2.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
     end
     group VF6C:
-      requirement invariant .VTL7.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
-      requirement invariant .VTL8.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
-      requirement invariant .VTL7.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
-      requirement invariant .VTL8.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
+      supervisor invariant .VTL7.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
+      supervisor invariant .VTL8.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
+      supervisor invariant .VTL7.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
+      supervisor invariant .VTL8.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
     end
     group VF6D:
-      requirement invariant .VTL5.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
-      requirement invariant .VTL6.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
-      requirement invariant .VTL5.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
-      requirement invariant .VTL6.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
+      supervisor invariant .VTL5.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      supervisor invariant .VTL6.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      supervisor invariant .VTL5.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
+      supervisor invariant .VTL6.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
     end
     group VF7:
       alg bool redLampShown = (VTL1.Red.On or VTL2.Red.On) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff) and (VTL3.Red.On or VTL4.Red.On) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff) and (VTL5.Red.On or VTL6.Red.On) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff) and (VTL7.Red.On or VTL8.Red.On) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
       alg bool RedAspectShown = (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff) and (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff) and (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff) and (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
-      requirement invariant .BD.Motor.c_on needs RedAspectShown or OverrideSwitch.On;
-      requirement invariant .BR.Actuator.c_release needs redLampShown or OverrideSwitch.On;
-      requirement invariant .LM.Pump.c_on needs redLampShown or OverrideSwitch.On;
-      requirement invariant .LM.Valve.c_lock needs redLampShown or OverrideSwitch.On;
-      requirement invariant .LM.Valve.c_unlock needs redLampShown or OverrideSwitch.On;
-      requirement invariant .BD.Direction.c_open needs redLampShown or OverrideSwitch.On;
-      requirement invariant .BD.Direction.c_close needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .BD.Motor.c_on needs RedAspectShown or OverrideSwitch.On;
+      supervisor invariant .BR.Actuator.c_release needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Pump.c_on needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Valve.c_lock needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Valve.c_unlock needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .BD.Direction.c_open needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .BD.Direction.c_close needs redLampShown or OverrideSwitch.On;
     end
     group VF8:
-      requirement invariant .BB1.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
-      requirement invariant .BB2.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
+      supervisor invariant .BB1.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
+      supervisor invariant .BB2.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
     end
     group VF10:
-      requirement invariant .StopSigns.Actuator.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
-      requirement invariant .BB.L.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
+      supervisor invariant .StopSigns.Actuator.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
+      supervisor invariant .BB.L.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
     end
     group VF11:
-      requirement invariant .StopSigns.Actuator.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
-      requirement invariant .BB.L.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
-      requirement invariant .StopSigns.Actuator.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
-      requirement invariant .BB.L.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
+      supervisor invariant .StopSigns.Actuator.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
+      supervisor invariant .BB.L.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
+      supervisor invariant .StopSigns.Actuator.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
+      supervisor invariant .BB.L.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
     end
     group VF13a:
-      requirement invariant .VTL1.Activated.c_off needs VTL1.RedStaysOff;
-      requirement invariant .VTL1.Activated.c_on needs not VTL1.RedStaysOff;
+      supervisor invariant .VTL1.Activated.c_off needs VTL1.RedStaysOff;
+      supervisor invariant .VTL1.Activated.c_on needs not VTL1.RedStaysOff;
     end
     group VF13b:
-      requirement invariant .VTL2.Activated.c_off needs VTL2.RedStaysOff;
-      requirement invariant .VTL2.Activated.c_on needs not VTL2.RedStaysOff;
+      supervisor invariant .VTL2.Activated.c_off needs VTL2.RedStaysOff;
+      supervisor invariant .VTL2.Activated.c_on needs not VTL2.RedStaysOff;
     end
     group VF13c:
-      requirement invariant .VTL3.Activated.c_off needs VTL3.RedStaysOff;
-      requirement invariant .VTL3.Activated.c_on needs not VTL3.RedStaysOff;
+      supervisor invariant .VTL3.Activated.c_off needs VTL3.RedStaysOff;
+      supervisor invariant .VTL3.Activated.c_on needs not VTL3.RedStaysOff;
     end
     group VF13d:
-      requirement invariant .VTL4.Activated.c_off needs VTL4.RedStaysOff;
-      requirement invariant .VTL4.Activated.c_on needs not VTL4.RedStaysOff;
+      supervisor invariant .VTL4.Activated.c_off needs VTL4.RedStaysOff;
+      supervisor invariant .VTL4.Activated.c_on needs not VTL4.RedStaysOff;
     end
     group VF13e:
-      requirement invariant .VTL5.Activated.c_off needs VTL5.RedStaysOff;
-      requirement invariant .VTL5.Activated.c_on needs not VTL5.RedStaysOff;
+      supervisor invariant .VTL5.Activated.c_off needs VTL5.RedStaysOff;
+      supervisor invariant .VTL5.Activated.c_on needs not VTL5.RedStaysOff;
     end
     group VF13f:
-      requirement invariant .VTL6.Activated.c_off needs VTL6.RedStaysOff;
-      requirement invariant .VTL6.Activated.c_on needs not VTL6.RedStaysOff;
+      supervisor invariant .VTL6.Activated.c_off needs VTL6.RedStaysOff;
+      supervisor invariant .VTL6.Activated.c_on needs not VTL6.RedStaysOff;
     end
     group VF13g:
-      requirement invariant .VTL7.Activated.c_off needs VTL7.RedStaysOff;
-      requirement invariant .VTL7.Activated.c_on needs not VTL7.RedStaysOff;
+      supervisor invariant .VTL7.Activated.c_off needs VTL7.RedStaysOff;
+      supervisor invariant .VTL7.Activated.c_on needs not VTL7.RedStaysOff;
     end
     group VF13h:
-      requirement invariant .VTL8.Activated.c_off needs VTL8.RedStaysOff;
-      requirement invariant .VTL8.Activated.c_on needs not VTL8.RedStaysOff;
+      supervisor invariant .VTL8.Activated.c_off needs VTL8.RedStaysOff;
+      supervisor invariant .VTL8.Activated.c_on needs not VTL8.RedStaysOff;
     end
   end
   group Functioneel:
-    requirement invariant .BB1.Actuator.c_close needs BB1.NotClosed.On;
-    requirement invariant .BB2.Actuator.c_close needs BB2.NotClosed.On;
-    requirement invariant .BB1.Actuator.c_close needs not BB1.Stuck;
-    requirement invariant .BB2.Actuator.c_close needs not BB2.Stuck;
-    requirement invariant .BB1.Actuator.c_open needs BB1.NotOpen.On;
-    requirement invariant .BB2.Actuator.c_open needs BB2.NotOpen.On;
-    requirement invariant .BB1.Actuator.c_open needs not BB1.Stuck;
-    requirement invariant .BB2.Actuator.c_open needs not BB2.Stuck;
-    requirement invariant .BB1.Actuator.c_stop needs BB1.Actuator.Closing and BB1ClosedTimer.Finished and BB1.NotClosed.Off or BB1.Actuator.Opening and BB1OpenTimer.Finished and BB1.NotOpen.Off or BB1.Stuck;
-    requirement invariant .BB2.Actuator.c_stop needs BB2.Actuator.Closing and BB2ClosedTimer.Finished and BB2.NotClosed.Off or BB2.Actuator.Opening and BB2OpenTimer.Finished and BB2.NotOpen.Off or BB2.Stuck;
-    requirement invariant .BR.Actuator.c_release needs BR.Release.On;
-    requirement invariant .BR.Actuator.c_apply needs BR.Release.Off;
-    requirement invariant .LM.Valve.c_unlock needs not LM.Unlocked.On and BD.Direction.Idle;
-    requirement invariant .LM.Valve.c_lock needs not LM.Locked.On and BD.Closed.On and BD.Closed2.On and BR.Sensor.Applied and BD.Direction.Idle;
-    requirement invariant .LM.Valve.c_stop needs LM.Valve.Unlock and LMUnlockedTimer100.Finished and LM.Unlocked.On or LM.Valve.Lock and LMLockedTimer.Finished and LM.Locked.On;
-    requirement invariant .LM.Pump.c_on needs not LM.Valve.Idle;
-    requirement invariant .LM.Pump.c_off needs LM.Valve.Idle;
-    requirement invariant .BD.Motor.c_off needs not(BB1.Closed.On and BB2.Closed.On) or not Beveiligingen.VF7.redLampShown and not OverrideSwitch.On;
-    requirement invariant .BD.Direction.c_open needs not BD.Open.On and LMUnlockedTimer3.Finished and LM.Unlocked.On;
-    requirement invariant .BD.Direction.c_close needs not BD.Closed.On and LM.Unlocked.On;
-    requirement invariant .BD.Direction.c_stop needs BD.Open.On and BD.Direction.Opening or BD.Closed.On and BDClosedTimer.Finished and BD.Direction.Closing;
-    requirement invariant .BD.Speed.c_fast needs BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off;
-    requirement invariant .BD.Speed.c_slow needs not(BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off);
-    requirement invariant .BD.Speed.c_slow needs BD.Direction.Opening and BD.Open.Off or BD.Direction.Closing and BD.Closed.Off;
-    requirement invariant .BD.Speed.c_stop needs BD.Direction.Idle;
+    supervisor invariant .BB1.Actuator.c_close needs BB1.NotClosed.On;
+    supervisor invariant .BB2.Actuator.c_close needs BB2.NotClosed.On;
+    supervisor invariant .BB1.Actuator.c_close needs not BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_close needs not BB2.Stuck;
+    supervisor invariant .BB1.Actuator.c_open needs BB1.NotOpen.On;
+    supervisor invariant .BB2.Actuator.c_open needs BB2.NotOpen.On;
+    supervisor invariant .BB1.Actuator.c_open needs not BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_open needs not BB2.Stuck;
+    supervisor invariant .BB1.Actuator.c_stop needs BB1.Actuator.Closing and BB1ClosedTimer.Finished and BB1.NotClosed.Off or BB1.Actuator.Opening and BB1OpenTimer.Finished and BB1.NotOpen.Off or BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_stop needs BB2.Actuator.Closing and BB2ClosedTimer.Finished and BB2.NotClosed.Off or BB2.Actuator.Opening and BB2OpenTimer.Finished and BB2.NotOpen.Off or BB2.Stuck;
+    supervisor invariant .BR.Actuator.c_release needs BR.Release.On;
+    supervisor invariant .BR.Actuator.c_apply needs BR.Release.Off;
+    supervisor invariant .LM.Valve.c_unlock needs not LM.Unlocked.On and BD.Direction.Idle;
+    supervisor invariant .LM.Valve.c_lock needs not LM.Locked.On and BD.Closed.On and BD.Closed2.On and BR.Sensor.Applied and BD.Direction.Idle;
+    supervisor invariant .LM.Valve.c_stop needs LM.Valve.Unlock and LMUnlockedTimer100.Finished and LM.Unlocked.On or LM.Valve.Lock and LMLockedTimer.Finished and LM.Locked.On;
+    supervisor invariant .LM.Pump.c_on needs not LM.Valve.Idle;
+    supervisor invariant .LM.Pump.c_off needs LM.Valve.Idle;
+    supervisor invariant .BD.Motor.c_off needs not(BB1.Closed.On and BB2.Closed.On) or not Beveiligingen.VF7.redLampShown and not OverrideSwitch.On;
+    supervisor invariant .BD.Direction.c_open needs not BD.Open.On and LMUnlockedTimer3.Finished and LM.Unlocked.On;
+    supervisor invariant .BD.Direction.c_close needs not BD.Closed.On and LM.Unlocked.On;
+    supervisor invariant .BD.Direction.c_stop needs BD.Open.On and BD.Direction.Opening or BD.Closed.On and BDClosedTimer.Finished and BD.Direction.Closing;
+    supervisor invariant .BD.Speed.c_fast needs BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off;
+    supervisor invariant .BD.Speed.c_slow needs not(BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off);
+    supervisor invariant .BD.Speed.c_slow needs BD.Direction.Opening and BD.Open.Off or BD.Direction.Closing and BD.Closed.Off;
+    supervisor invariant .BD.Speed.c_stop needs BD.Direction.Idle;
   end
   group GUI:
     group emergencyStops:
-      requirement invariant .BB1.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
-      requirement invariant .BB2.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
-      requirement invariant .BR.Actuator.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .LM.Valve.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .LM.Pump.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .BD.Motor.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .BD.Direction.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .BD.Speed.c_emrgStop needs emergency or BridgeCommands.StopB;
-      requirement invariant .BB1.Actuator.c_open needs not emergency;
-      requirement invariant .BB1.Actuator.c_close needs not emergency;
-      requirement invariant .BB2.Actuator.c_open needs not emergency;
-      requirement invariant .BB2.Actuator.c_close needs not emergency;
-      requirement invariant .BR.Actuator.c_release needs not emergency;
-      requirement invariant .LM.Valve.c_unlock needs not emergency;
-      requirement invariant .LM.Valve.c_lock needs not emergency;
-      requirement invariant .LM.Pump.c_on needs not emergency;
-      requirement invariant .BD.Direction.c_open needs not emergency;
-      requirement invariant .BD.Direction.c_close needs not emergency;
-      requirement invariant .BD.Speed.c_fast needs not emergency;
-      requirement invariant .BD.Speed.c_slow needs not emergency;
-      requirement invariant .BD.Motor.c_on needs not emergency;
-      requirement invariant .BR.Actuator.c_release needs not BridgeCommands.StopB;
-      requirement invariant .BD.Motor.c_on needs not BridgeCommands.StopB;
-      requirement invariant .LM.Pump.c_on needs not BridgeCommands.StopB;
-      requirement invariant .BD.Speed.c_fast needs not BridgeCommands.StopB;
-      requirement invariant .BD.Speed.c_slow needs not BridgeCommands.StopB;
+      supervisor invariant .BB1.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
+      supervisor invariant .BB2.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
+      supervisor invariant .BR.Actuator.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .LM.Valve.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .LM.Pump.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Motor.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Direction.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BB1.Actuator.c_open needs not emergency;
+      supervisor invariant .BB1.Actuator.c_close needs not emergency;
+      supervisor invariant .BB2.Actuator.c_open needs not emergency;
+      supervisor invariant .BB2.Actuator.c_close needs not emergency;
+      supervisor invariant .BR.Actuator.c_release needs not emergency;
+      supervisor invariant .LM.Valve.c_unlock needs not emergency;
+      supervisor invariant .LM.Valve.c_lock needs not emergency;
+      supervisor invariant .LM.Pump.c_on needs not emergency;
+      supervisor invariant .BD.Direction.c_open needs not emergency;
+      supervisor invariant .BD.Direction.c_close needs not emergency;
+      supervisor invariant .BD.Speed.c_fast needs not emergency;
+      supervisor invariant .BD.Speed.c_slow needs not emergency;
+      supervisor invariant .BD.Motor.c_on needs not emergency;
+      supervisor invariant .BR.Actuator.c_release needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Motor.c_on needs not BridgeCommands.StopB;
+      supervisor invariant .LM.Pump.c_on needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_fast needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_slow needs not BridgeCommands.StopB;
     end
     group GUI_VTL1:
-      requirement invariant .VTL1.Actuator.c_red needs CommandVTL12.Red;
-      requirement invariant .VTL1.Actuator.c_redRed needs CommandVTL12.RedRed;
-      requirement invariant .VTL1.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
-      requirement invariant .VTL1.Actuator.c_green needs CommandVTL12.Green and not emergency;
-      requirement invariant .VTL1.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL1.Actuator.c_red needs CommandVTL12.Red;
+      supervisor invariant .VTL1.Actuator.c_redRed needs CommandVTL12.RedRed;
+      supervisor invariant .VTL1.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
+      supervisor invariant .VTL1.Actuator.c_green needs CommandVTL12.Green and not emergency;
+      supervisor invariant .VTL1.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL2:
-      requirement invariant .VTL2.Actuator.c_red needs CommandVTL12.Red;
-      requirement invariant .VTL2.Actuator.c_redRed needs CommandVTL12.RedRed;
-      requirement invariant .VTL2.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
-      requirement invariant .VTL2.Actuator.c_green needs CommandVTL12.Green and not emergency;
-      requirement invariant .VTL2.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL2.Actuator.c_red needs CommandVTL12.Red;
+      supervisor invariant .VTL2.Actuator.c_redRed needs CommandVTL12.RedRed;
+      supervisor invariant .VTL2.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
+      supervisor invariant .VTL2.Actuator.c_green needs CommandVTL12.Green and not emergency;
+      supervisor invariant .VTL2.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL3:
-      requirement invariant .VTL3.Actuator.c_red needs CommandVTL34.Red;
-      requirement invariant .VTL3.Actuator.c_redRed needs CommandVTL34.RedRed;
-      requirement invariant .VTL3.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
-      requirement invariant .VTL3.Actuator.c_green needs CommandVTL34.Green and not emergency;
-      requirement invariant .VTL3.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL3.Actuator.c_red needs CommandVTL34.Red;
+      supervisor invariant .VTL3.Actuator.c_redRed needs CommandVTL34.RedRed;
+      supervisor invariant .VTL3.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
+      supervisor invariant .VTL3.Actuator.c_green needs CommandVTL34.Green and not emergency;
+      supervisor invariant .VTL3.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL4:
-      requirement invariant .VTL4.Actuator.c_red needs CommandVTL34.Red;
-      requirement invariant .VTL4.Actuator.c_redRed needs CommandVTL34.RedRed;
-      requirement invariant .VTL4.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
-      requirement invariant .VTL4.Actuator.c_green needs CommandVTL34.Green and not emergency;
-      requirement invariant .VTL4.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL4.Actuator.c_red needs CommandVTL34.Red;
+      supervisor invariant .VTL4.Actuator.c_redRed needs CommandVTL34.RedRed;
+      supervisor invariant .VTL4.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
+      supervisor invariant .VTL4.Actuator.c_green needs CommandVTL34.Green and not emergency;
+      supervisor invariant .VTL4.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL5:
-      requirement invariant .VTL5.Actuator.c_red needs CommandVTL56.Red;
-      requirement invariant .VTL5.Actuator.c_redRed needs CommandVTL56.RedRed;
-      requirement invariant .VTL5.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
-      requirement invariant .VTL5.Actuator.c_green needs CommandVTL56.Green and not emergency;
-      requirement invariant .VTL5.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL5.Actuator.c_red needs CommandVTL56.Red;
+      supervisor invariant .VTL5.Actuator.c_redRed needs CommandVTL56.RedRed;
+      supervisor invariant .VTL5.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
+      supervisor invariant .VTL5.Actuator.c_green needs CommandVTL56.Green and not emergency;
+      supervisor invariant .VTL5.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL6:
-      requirement invariant .VTL6.Actuator.c_red needs CommandVTL56.Red;
-      requirement invariant .VTL6.Actuator.c_redRed needs CommandVTL56.RedRed;
-      requirement invariant .VTL6.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
-      requirement invariant .VTL6.Actuator.c_green needs CommandVTL56.Green and not emergency;
-      requirement invariant .VTL6.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL6.Actuator.c_red needs CommandVTL56.Red;
+      supervisor invariant .VTL6.Actuator.c_redRed needs CommandVTL56.RedRed;
+      supervisor invariant .VTL6.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
+      supervisor invariant .VTL6.Actuator.c_green needs CommandVTL56.Green and not emergency;
+      supervisor invariant .VTL6.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL7:
-      requirement invariant .VTL7.Actuator.c_red needs CommandVTL78.Red;
-      requirement invariant .VTL7.Actuator.c_redRed needs CommandVTL78.RedRed;
-      requirement invariant .VTL7.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
-      requirement invariant .VTL7.Actuator.c_green needs CommandVTL78.Green and not emergency;
-      requirement invariant .VTL7.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL7.Actuator.c_red needs CommandVTL78.Red;
+      supervisor invariant .VTL7.Actuator.c_redRed needs CommandVTL78.RedRed;
+      supervisor invariant .VTL7.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
+      supervisor invariant .VTL7.Actuator.c_green needs CommandVTL78.Green and not emergency;
+      supervisor invariant .VTL7.Actuator.c_emrg needs emergency;
     end
     group GUI_VTL8:
-      requirement invariant .VTL8.Actuator.c_red needs CommandVTL78.Red;
-      requirement invariant .VTL8.Actuator.c_redRed needs CommandVTL78.RedRed;
-      requirement invariant .VTL8.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
-      requirement invariant .VTL8.Actuator.c_green needs CommandVTL78.Green and not emergency;
-      requirement invariant .VTL8.Actuator.c_emrg needs emergency;
+      supervisor invariant .VTL8.Actuator.c_red needs CommandVTL78.Red;
+      supervisor invariant .VTL8.Actuator.c_redRed needs CommandVTL78.RedRed;
+      supervisor invariant .VTL8.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
+      supervisor invariant .VTL8.Actuator.c_green needs CommandVTL78.Green and not emergency;
+      supervisor invariant .VTL8.Actuator.c_emrg needs emergency;
     end
-    requirement invariant .StopSigns.Actuator.c_on needs BridgeCommands.CloseLT;
-    requirement invariant .BB.L.c_on needs BridgeCommands.CloseLT;
-    requirement invariant .BB1.Actuator.c_close needs BridgeCommands.CloseBB;
-    requirement invariant .BB2.Actuator.c_close needs BridgeCommands.CloseBB;
-    requirement invariant .BD.Direction.c_open needs BridgeCommands.OpenB;
-    requirement invariant .LM.Valve.c_unlock needs BridgeCommands.OpenB;
-    requirement invariant .BD.Direction.c_close needs BridgeCommands.CloseB;
-    requirement invariant .LM.Valve.c_lock needs BridgeCommands.CloseB;
-    requirement invariant .BB1.Actuator.c_open needs BridgeCommands.OpenB;
-    requirement invariant .BB2.Actuator.c_open needs BridgeCommands.OpenB;
-    requirement invariant .StopSigns.Actuator.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
-    requirement invariant .BB.L.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
+    supervisor invariant .StopSigns.Actuator.c_on needs BridgeCommands.CloseLT;
+    supervisor invariant .BB.L.c_on needs BridgeCommands.CloseLT;
+    supervisor invariant .BB1.Actuator.c_close needs BridgeCommands.CloseBB;
+    supervisor invariant .BB2.Actuator.c_close needs BridgeCommands.CloseBB;
+    supervisor invariant .BD.Direction.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .LM.Valve.c_unlock needs BridgeCommands.OpenB;
+    supervisor invariant .BD.Direction.c_close needs BridgeCommands.CloseB;
+    supervisor invariant .LM.Valve.c_lock needs BridgeCommands.CloseB;
+    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .StopSigns.Actuator.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
+    supervisor invariant .BB.L.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
   end
   group StopSigns:
     alg bool S1StaysOff = .StopSigns.DiagnoseSS1.StaysOff;
