@@ -2162,29 +2162,21 @@ group CommandVTL12:
   uncontrollable u_red;
   uncontrollable u_green;
   uncontrollable u_emerg;
-  uncontrollable u_redRed;
-  uncontrollable u_r2Off;
 end
 group CommandVTL34:
   uncontrollable u_red;
   uncontrollable u_green;
   uncontrollable u_emerg;
-  uncontrollable u_redRed;
-  uncontrollable u_r2Off;
 end
 group CommandVTL56:
   uncontrollable u_red;
   uncontrollable u_green;
   uncontrollable u_emerg;
-  uncontrollable u_redRed;
-  uncontrollable u_r2Off;
 end
 group CommandVTL78:
   uncontrollable u_red;
   uncontrollable u_green;
   uncontrollable u_emerg;
-  uncontrollable u_redRed;
-  uncontrollable u_r2Off;
 end
 plant automaton EmergencyStop:
   uncontrollable u_emerg_on;
@@ -2434,8 +2426,8 @@ group sup:
     supervisor invariant .LM.Valve.c_unlock needs BridgeCommands.OpenB;
     supervisor invariant .BD.Direction.c_close needs BridgeCommands.CloseB;
     supervisor invariant .LM.Valve.c_lock needs BridgeCommands.CloseB;
-    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenB;
-    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenBB;
+    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenBB;
     supervisor invariant .StopSigns.Actuator.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
     supervisor invariant .BB.L.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
   end
