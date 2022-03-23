@@ -314,8 +314,8 @@ group GUI:
     requirement LM.Valve.c_lock             needs BridgeCommands.CloseB;
 
     //Barriers Open
-    requirement BB1.Actuator.c_open         needs BridgeCommands.OpenB;
-    requirement BB2.Actuator.c_open         needs BridgeCommands.OpenB;
+    requirement BB1.Actuator.c_open         needs BridgeCommands.OpenBB;
+    requirement BB2.Actuator.c_open         needs BridgeCommands.OpenBB;
 
     //LVS Uit
     requirement StopSigns.Actuator.c_off    needs BridgeCommands.OpenLT or BridgeCommands.L10;
