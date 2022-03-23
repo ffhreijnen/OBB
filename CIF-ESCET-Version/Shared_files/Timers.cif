@@ -21,7 +21,7 @@ group BB:
     end
 end
 
-SSsOnTimer         : .Timer(16.4);
+SSsOnTimer         : Timer(16.4);
 
 BBsOpenTimer       : Timer(3.0);
 BB1OpenTimer       : Timer(0.6);
