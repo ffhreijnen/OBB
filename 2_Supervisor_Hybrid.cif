@@ -1,0 +1,4472 @@
+uncontrollable u_r2;
+uncontrollable u_r2Off;
+const real Tdisc_BB_es = 1.0;
+const real Tdisc_brug_es = 1.0;
+const real Tdisc_lamp = 2.0;
+const real Tdisc_lockingMechism = 2.5;
+const real Tmax_BBOpening = 15.0;
+const real Tmax_BBClosing = 15.0;
+const real Tmax_LockingMLock = 50.0;
+const real Tmax_LockingMUnlock = 50.0;
+const real Tmin_BridgeClose = 1.8;
+const real Tmin_BridgeOpen = 1.8;
+group StopSigns:
+  alg bool fault123 = DiagnoseSS1.fault or DiagnoseSS2.fault or DiagnoseSS3.fault;
+  alg bool fault45 = DiagnoseSS4.fault or DiagnoseSS5.fault;
+  automaton Actuator:
+    controllable c_on;
+    controllable c_emrgOn;
+    controllable c_off;
+    location Off:
+      initial;
+      edge c_on goto On;
+      edge c_emrgOn goto On;
+    location On:
+      edge c_off goto Off;
+  end
+  automaton S1:
+    uncontrollable u_on;
+    uncontrollable u_off;
+    alg bool onGuard = Actuator.On and not S1Fault.Defect;
+    location Off:
+      initial;
+      edge u_on when onGuard goto On;
+    location On:
+      edge u_off when not onGuard goto Off;
+  end
+  automaton S2:
+    uncontrollable u_on;
+    uncontrollable u_off;
+    alg bool onGuard = Actuator.On and not S2Fault.Defect;
+    location Off:
+      initial;
+      edge u_on when onGuard goto On;
+    location On:
+      edge u_off when not onGuard goto Off;
+  end
+  automaton S3:
+    uncontrollable u_on;
+    uncontrollable u_off;
+    alg bool onGuard = Actuator.On and not S3Fault.Defect;
+    location Off:
+      initial;
+      edge u_on when onGuard goto On;
+    location On:
+      edge u_off when not onGuard goto Off;
+  end
+  automaton S4:
+    uncontrollable u_on;
+    uncontrollable u_off;
+    alg bool onGuard = Actuator.On and not S4Fault.Defect;
+    location Off:
+      initial;
+      edge u_on when onGuard goto On;
+    location On:
+      edge u_off when not onGuard goto Off;
+  end
+  automaton S5:
+    uncontrollable u_on;
+    uncontrollable u_off;
+    alg bool onGuard = Actuator.On and not S5Fault.Defect;
+    location Off:
+      initial;
+      edge u_on when onGuard goto On;
+    location On:
+      edge u_off when not onGuard goto Off;
+  end
+  automaton DiagnoseSS1:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.StopSigns.S1.On;
+    alg bool Q = sup.StopSigns.Actuator.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lamp;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseSS2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.StopSigns.S2.On;
+    alg bool Q = sup.StopSigns.Actuator.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lamp;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseSS3:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.StopSigns.S3.On;
+    alg bool Q = sup.StopSigns.Actuator.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lamp;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseSS4:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.StopSigns.S4.On;
+    alg bool Q = sup.StopSigns.Actuator.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lamp;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseSS5:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.StopSigns.S5.On;
+    alg bool Q = sup.StopSigns.Actuator.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lamp;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton S1Fault:
+    disc bool Defect;
+    uncontrollable u_f;
+    location:
+      initial;
+      edge u_f do Defect := not Defect;
+  end
+  automaton S2Fault:
+    disc bool Defect;
+    uncontrollable u_f;
+    location:
+      initial;
+      edge u_f do Defect := not Defect;
+  end
+  automaton S3Fault:
+    disc bool Defect;
+    uncontrollable u_f;
+    location:
+      initial;
+      edge u_f do Defect := not Defect;
+  end
+  automaton S4Fault:
+    disc bool Defect;
+    uncontrollable u_f;
+    location:
+      initial;
+      edge u_f do Defect := not Defect;
+  end
+  automaton S5Fault:
+    disc bool Defect;
+    uncontrollable u_f;
+    location:
+      initial;
+      edge u_f do Defect := not Defect;
+  end
+end
+automaton SSsOnTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 16.4;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+group BB:
+  automaton L:
+    controllable c_on;
+    controllable c_emrgOn;
+    controllable c_off;
+    location Off:
+      initial;
+      edge c_on goto On;
+      edge c_emrgOn goto On;
+    location On:
+      edge c_off goto Off;
+  end
+  automaton Alternate:
+    controllable c_mode1;
+    controllable c_mode2;
+    location Mode1:
+      initial;
+      edge c_mode2 goto Mode2;
+    location Mode2:
+      edge c_mode1 goto Mode1;
+  end
+  plant automaton Switcher:
+    cont t = 0.0 der -1.0;
+    location:
+      initial;
+      edge Alternate.c_mode2 when t <= 0 do t := 1000.0;
+      edge Alternate.c_mode1 when t <= 0 do t := 1.0;
+  end
+end
+group BB1:
+  alg bool fault = DiagnoseBBStuck.fault or DiagnoseBBUndesiredClosed.fault or DiagnoseBBUndesiredOpen.fault;
+  alg bool Q_opening = sup.BB1.Actuator.Opening;
+  alg bool Q_closing = sup.BB1.Actuator.Closing;
+  alg bool Geopend_regulier = sup.BB1.NotOpen.Off;
+  alg bool Gesloten_regulier = sup.BB1.NotClosed.Off;
+  alg bool Geopend_safe = sup.BB1.Open.On;
+  alg bool Gesloten_safe = sup.BB1.Closed.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real ltBB_opening = Tmax_BBOpening;
+  alg real ltBB_closing = Tmax_BBClosing;
+  alg real discBB_es = Tdisc_BB_es;
+  automaton Actuator:
+    controllable c_open;
+    controllable c_close;
+    controllable c_stop;
+    controllable c_emrgStop;
+    location Idle:
+      initial;
+      edge c_open goto Opening;
+      edge c_close goto Closing;
+    location Opening:
+      edge c_stop, c_emrgStop goto Idle;
+    location Closing:
+      edge c_stop, c_emrgStop goto Idle;
+  end
+  automaton Open:
+    uncontrollable u_open_on;
+    uncontrollable u_open_off;
+    location On:
+      initial;
+      edge u_open_off when Positie.d > 0.0 goto Off;
+    location Off:
+      edge u_open_on when Positie.d <= 0.0 goto On;
+  end
+  automaton Closed:
+    uncontrollable u_closed_on;
+    uncontrollable u_closed_off;
+    location On:
+      edge u_closed_off when Positie.d < 100.0 goto Off;
+    location Off:
+      initial;
+      edge u_closed_on when Positie.d >= 100.0 goto On;
+  end
+  automaton NotOpen:
+    uncontrollable u_notOpen_on;
+    uncontrollable u_notOpen_off;
+    location Off:
+      initial;
+      edge u_notOpen_on when Positie.d > 5.0 goto On;
+    location On:
+      edge u_notOpen_off when Positie.d <= 5.0 goto Off;
+  end
+  automaton NotClosed:
+    uncontrollable u_notClosed_on;
+    uncontrollable u_notClosed_off;
+    location Off:
+      edge u_notClosed_on when Positie.d < 95.0 goto On;
+    location On:
+      initial;
+      edge u_notClosed_off when Positie.d >= 95.0 goto Off;
+  end
+  automaton DiagnoseBBStuck:
+    alg bool fault = Stuck;
+    cont t = 0.0 der if DiagnosingOpening or DiagnosingClosing: -1.0 else 0.0 end;
+    alg bool I_o = Geopend_regulier;
+    alg bool I_c = Gesloten_regulier;
+    alg bool Q_o = Q_opening;
+    alg bool Q_c = Q_closing;
+    alg bool Reset = .BB1.Reset;
+    alg real t_o = ltBB_opening;
+    alg real t_c = ltBB_closing;
+    location NoDefect:
+      initial;
+      edge when Q_o do t := t_o goto DiagnosingOpening;
+      edge when Q_c do t := t_c goto DiagnosingClosing;
+    location DiagnosingOpening:
+      edge when t <= 0 and Q_o and not I_o goto Stuck;
+      edge when not Q_o goto NoDefect;
+    location DiagnosingClosing:
+      edge when t <= 0 and Q_c and not I_c goto Stuck;
+      edge when not Q_c goto NoDefect;
+    location Stuck:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseBBUndesiredClosed:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = Geopend_safe;
+    alg bool Q = Q_closing;
+    alg bool Reset = .BB1.Reset;
+    alg real t_f = discBB_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  automaton DiagnoseBBUndesiredOpen:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = Gesloten_safe;
+    alg bool Q = Q_opening;
+    alg bool Reset = .BB1.Reset;
+    alg real t_f = discBB_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  group Positie:
+    cont d = 0.0 der if d <= 100 and Actuator.Closing and not Fault.Stuck: +20.0 elif d <= 100 and Fault.UndesiredClose: +2.0 elif d >= 0 and Actuator.Opening and not Fault.Stuck: -20.0 elif d >= 0 and Fault.UndesiredOpen: -2.0 else 0.0 end;
+  end
+  automaton Fault:
+    uncontrollable u_f3;
+    uncontrollable u_f4_closed;
+    uncontrollable u_f4_open;
+    disc bool Stuck = false;
+    disc bool UndesiredClose = false;
+    disc bool UndesiredOpen = false;
+    location:
+      initial;
+      edge u_f3 do Stuck := not Stuck;
+      edge u_f4_closed do UndesiredClose := not UndesiredClose;
+      edge u_f4_open do UndesiredOpen := not UndesiredOpen;
+  end
+end
+group BB2:
+  alg bool fault = DiagnoseBBStuck.fault or DiagnoseBBUndesiredClosed.fault or DiagnoseBBUndesiredOpen.fault;
+  alg bool Q_opening = sup.BB2.Actuator.Opening;
+  alg bool Q_closing = sup.BB2.Actuator.Closing;
+  alg bool Geopend_regulier = sup.BB2.NotOpen.Off;
+  alg bool Gesloten_regulier = sup.BB2.NotClosed.Off;
+  alg bool Geopend_safe = sup.BB2.Open.On;
+  alg bool Gesloten_safe = sup.BB2.Closed.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real ltBB_opening = Tmax_BBOpening;
+  alg real ltBB_closing = Tmax_BBClosing;
+  alg real discBB_es = Tdisc_BB_es;
+  automaton Actuator:
+    controllable c_open;
+    controllable c_close;
+    controllable c_stop;
+    controllable c_emrgStop;
+    location Idle:
+      initial;
+      edge c_open goto Opening;
+      edge c_close goto Closing;
+    location Opening:
+      edge c_stop, c_emrgStop goto Idle;
+    location Closing:
+      edge c_stop, c_emrgStop goto Idle;
+  end
+  automaton Open:
+    uncontrollable u_open_on;
+    uncontrollable u_open_off;
+    location On:
+      initial;
+      edge u_open_off when Positie.d > 0.0 goto Off;
+    location Off:
+      edge u_open_on when Positie.d <= 0.0 goto On;
+  end
+  automaton Closed:
+    uncontrollable u_closed_on;
+    uncontrollable u_closed_off;
+    location On:
+      edge u_closed_off when Positie.d < 100.0 goto Off;
+    location Off:
+      initial;
+      edge u_closed_on when Positie.d >= 100.0 goto On;
+  end
+  automaton NotOpen:
+    uncontrollable u_notOpen_on;
+    uncontrollable u_notOpen_off;
+    location Off:
+      initial;
+      edge u_notOpen_on when Positie.d > 5.0 goto On;
+    location On:
+      edge u_notOpen_off when Positie.d <= 5.0 goto Off;
+  end
+  automaton NotClosed:
+    uncontrollable u_notClosed_on;
+    uncontrollable u_notClosed_off;
+    location Off:
+      edge u_notClosed_on when Positie.d < 95.0 goto On;
+    location On:
+      initial;
+      edge u_notClosed_off when Positie.d >= 95.0 goto Off;
+  end
+  automaton DiagnoseBBStuck:
+    alg bool fault = Stuck;
+    cont t = 0.0 der if DiagnosingOpening or DiagnosingClosing: -1.0 else 0.0 end;
+    alg bool I_o = Geopend_regulier;
+    alg bool I_c = Gesloten_regulier;
+    alg bool Q_o = Q_opening;
+    alg bool Q_c = Q_closing;
+    alg bool Reset = .BB2.Reset;
+    alg real t_o = ltBB_opening;
+    alg real t_c = ltBB_closing;
+    location NoDefect:
+      initial;
+      edge when Q_o do t := t_o goto DiagnosingOpening;
+      edge when Q_c do t := t_c goto DiagnosingClosing;
+    location DiagnosingOpening:
+      edge when t <= 0 and Q_o and not I_o goto Stuck;
+      edge when not Q_o goto NoDefect;
+    location DiagnosingClosing:
+      edge when t <= 0 and Q_c and not I_c goto Stuck;
+      edge when not Q_c goto NoDefect;
+    location Stuck:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseBBUndesiredClosed:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = Geopend_safe;
+    alg bool Q = Q_closing;
+    alg bool Reset = .BB2.Reset;
+    alg real t_f = discBB_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  automaton DiagnoseBBUndesiredOpen:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = Gesloten_safe;
+    alg bool Q = Q_opening;
+    alg bool Reset = .BB2.Reset;
+    alg real t_f = discBB_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  group Positie:
+    cont d = 0.0 der if d <= 100 and Actuator.Closing and not Fault.Stuck: +20.0 elif d <= 100 and Fault.UndesiredClose: +2.0 elif d >= 0 and Actuator.Opening and not Fault.Stuck: -20.0 elif d >= 0 and Fault.UndesiredOpen: -2.0 else 0.0 end;
+  end
+  automaton Fault:
+    uncontrollable u_f3;
+    uncontrollable u_f4_closed;
+    uncontrollable u_f4_open;
+    disc bool Stuck = false;
+    disc bool UndesiredClose = false;
+    disc bool UndesiredOpen = false;
+    location:
+      initial;
+      edge u_f3 do Stuck := not Stuck;
+      edge u_f4_closed do UndesiredClose := not UndesiredClose;
+      edge u_f4_open do UndesiredOpen := not UndesiredOpen;
+  end
+end
+automaton BBsOpenTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 3.0;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton BB1OpenTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.6;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton BB1ClosedTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.3;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton BB2OpenTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.6;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton BB2ClosedTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.3;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+group VTL1:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL1.Red.On;
+  alg bool I_Green = sup.VTL1.Green.On;
+  alg bool I_Red2 = sup.VTL1.Red2.On;
+  alg bool Q_Red = sup.VTL1.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL1.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL1.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL1.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL1.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL1.Reset;
+    alg real t_f = .VTL1.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL1.Reset;
+    alg real t_f = .VTL1.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL1.Reset;
+    alg real t_f = .VTL1.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL2:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL2.Red.On;
+  alg bool I_Green = sup.VTL2.Green.On;
+  alg bool I_Red2 = sup.VTL2.Red2.On;
+  alg bool Q_Red = sup.VTL2.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL2.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL2.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL2.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL2.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL2.Reset;
+    alg real t_f = .VTL2.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL2.Reset;
+    alg real t_f = .VTL2.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL2.Reset;
+    alg real t_f = .VTL2.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL3:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL3.Red.On;
+  alg bool I_Green = sup.VTL3.Green.On;
+  alg bool I_Red2 = sup.VTL3.Red2.On;
+  alg bool Q_Red = sup.VTL3.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL3.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL3.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL3.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL3.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL3.Reset;
+    alg real t_f = .VTL3.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL3.Reset;
+    alg real t_f = .VTL3.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL3.Reset;
+    alg real t_f = .VTL3.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL4:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL4.Red.On;
+  alg bool I_Green = sup.VTL4.Green.On;
+  alg bool I_Red2 = sup.VTL4.Red2.On;
+  alg bool Q_Red = sup.VTL4.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL4.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL4.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL4.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL4.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL4.Reset;
+    alg real t_f = .VTL4.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL4.Reset;
+    alg real t_f = .VTL4.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL4.Reset;
+    alg real t_f = .VTL4.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL5:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL5.Red.On;
+  alg bool I_Green = sup.VTL5.Green.On;
+  alg bool I_Red2 = sup.VTL5.Red2.On;
+  alg bool Q_Red = sup.VTL5.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL5.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL5.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL5.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL5.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL5.Reset;
+    alg real t_f = .VTL5.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL5.Reset;
+    alg real t_f = .VTL5.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL5.Reset;
+    alg real t_f = .VTL5.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL6:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL6.Red.On;
+  alg bool I_Green = sup.VTL6.Green.On;
+  alg bool I_Red2 = sup.VTL6.Red2.On;
+  alg bool Q_Red = sup.VTL6.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL6.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL6.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL6.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL6.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL6.Reset;
+    alg real t_f = .VTL6.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL6.Reset;
+    alg real t_f = .VTL6.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL6.Reset;
+    alg real t_f = .VTL6.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL7:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL7.Red.On;
+  alg bool I_Green = sup.VTL7.Green.On;
+  alg bool I_Red2 = sup.VTL7.Red2.On;
+  alg bool Q_Red = sup.VTL7.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL7.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL7.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL7.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL7.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL7.Reset;
+    alg real t_f = .VTL7.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL7.Reset;
+    alg real t_f = .VTL7.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL7.Reset;
+    alg real t_f = .VTL7.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group VTL8:
+  alg bool fault = DiagnoseRed.fault;
+  alg bool I_Red = sup.VTL8.Red.On;
+  alg bool I_Green = sup.VTL8.Green.On;
+  alg bool I_Red2 = sup.VTL8.Red2.On;
+  alg bool Q_Red = sup.VTL8.Actuator.Red;
+  alg bool Q_Redgreen = sup.VTL8.Actuator.RedGreen;
+  alg bool Q_Green = sup.VTL8.Actuator.Green;
+  alg bool Q_Red2 = sup.VTL8.Actuator.RedRed;
+  alg bool Q_Activated = sup.VTL8.Activated.On;
+  alg bool Reset = sup.ResetKnop.ResetStoring;
+  alg real t_f = Tdisc_lamp;
+  automaton Actuator:
+    controllable c_red;
+    controllable c_redGreen;
+    controllable c_redRed;
+    controllable c_green;
+    controllable c_emrg;
+    location RedRed:
+      edge c_red goto Red;
+    location Red:
+      initial;
+      marked;
+      edge c_redGreen goto RedGreen;
+      edge c_redRed goto RedRed;
+    location RedGreen:
+      edge c_red goto Red;
+      edge c_green goto Green;
+      edge c_emrg goto Red;
+    location Green:
+      edge c_red goto Red;
+      edge c_emrg goto Red;
+  end
+  automaton Activated:
+    controllable c_on;
+    controllable c_off;
+    location On:
+      initial;
+      marked;
+      edge c_off goto Off;
+    location Off:
+      edge c_on goto On;
+  end
+  automaton Red:
+    uncontrollable u_red_on;
+    uncontrollable u_red_off;
+    alg bool onGuard = not VTL_defect.RedLampDefect and (Actuator.Red or Actuator.RedGreen or Actuator.RedRed) and Activated.On;
+    location Off:
+      edge u_red_on when onGuard goto On;
+    location On:
+      initial;
+      edge u_red_off when not onGuard goto Off;
+  end
+  automaton Green:
+    uncontrollable u_green_on;
+    uncontrollable u_green_off;
+    alg bool onGuard = not VTL_defect.GreenLampDefect and (Actuator.Green or Actuator.RedGreen) and Activated.On;
+    location Off:
+      initial;
+      edge u_green_on when onGuard goto On;
+    location On:
+      edge u_green_off when not onGuard goto Off;
+  end
+  automaton Red2:
+    uncontrollable u_red2_on;
+    uncontrollable u_red2_off;
+    alg bool onGuard = not VTL_defect.Red2LampDefect and Actuator.RedRed and Activated.On;
+    location Off:
+      initial;
+      edge u_red2_on when onGuard goto On;
+    location On:
+      marked;
+      edge u_red2_off when not onGuard goto Off;
+  end
+  automaton DiagnoseRed:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red;
+    alg bool Q = (Q_Red or Q_Redgreen or Q_Red2) and Q_Activated;
+    alg bool Reset = .VTL8.Reset;
+    alg real t_f = .VTL8.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseGreen:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Green;
+    alg bool Q = (Q_Green or Q_Redgreen) and Q_Activated;
+    alg bool Reset = .VTL8.Reset;
+    alg real t_f = .VTL8.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton DiagnoseRed2:
+    alg bool fault = StaysOff;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = I_Red2;
+    alg bool Q = Q_Red2 and Q_Activated;
+    alg bool Reset = .VTL8.Reset;
+    alg real t_f = .VTL8.t_f;
+    location NoDefect:
+      initial;
+      edge when I != Q do t := t_f goto Diagnosing;
+    location Diagnosing:
+      edge when I = Q goto NoDefect;
+      edge when t <= 0 and I != Q and Q goto StaysOff;
+      edge when t <= 0 and I != Q and not Q goto StaysOn;
+    location StaysOff:
+      edge when Reset goto NoDefect;
+    location StaysOn:
+      edge when Reset goto NoDefect;
+  end
+  automaton VTL_defect:
+    uncontrollable u_f2;
+    uncontrollable u_f2_1;
+    uncontrollable u_f2_2;
+    disc bool RedLampDefect = false;
+    disc bool GreenLampDefect = false;
+    disc bool Red2LampDefect = false;
+    location:
+      initial;
+      edge u_f2 do RedLampDefect := not RedLampDefect;
+      edge u_f2_1 do GreenLampDefect := not GreenLampDefect;
+      edge u_f2_2 do Red2LampDefect := not Red2LampDefect;
+  end
+end
+group BR:
+  automaton Actuator:
+    controllable c_release;
+    controllable c_apply;
+    controllable c_emrgStop;
+    location Apply:
+      initial;
+      edge c_release goto Release;
+    location Release:
+      edge c_apply, c_emrgStop goto Apply;
+  end
+  automaton Sensor:
+    uncontrollable u_released;
+    uncontrollable u_applied;
+    location Applied:
+      initial;
+      marked;
+      edge u_released when Position.t <= 0.0 goto Released;
+    location Released:
+      edge u_applied when Position.t >= 1.0 goto Applied;
+  end
+  automaton Release:
+    uncontrollable u_release;
+    uncontrollable u_apply;
+    cont t der if warmUp: -1.0 else 0.0 end;
+    location Off:
+      initial;
+      edge when BD.Motor.On and not BD.Direction.Idle do t := 2.0 goto warmUp;
+    location warmUp:
+      edge u_release when t <= 0.0 goto On;
+    location On:
+      edge u_apply when BD.Motor.Off or BD.Direction.Idle goto Off;
+  end
+  group Position:
+    cont t = 1.0 der if Actuator.Apply and t < 1.0: +1.0 elif Actuator.Release and t > 0.0: -1.0 else 0.0 end;
+  end
+end
+group LM:
+  automaton Valve:
+    controllable c_lock;
+    controllable c_unlock;
+    controllable c_stop;
+    controllable c_emrgStop;
+    location Idle:
+      initial;
+      edge c_lock goto Lock;
+      edge c_unlock goto Unlock;
+    location Lock:
+      edge c_stop, c_emrgStop goto Idle;
+    location Unlock:
+      edge c_stop, c_emrgStop goto Idle;
+  end
+  automaton Pump:
+    controllable c_on;
+    controllable c_off;
+    controllable c_emrgStop;
+    location Off:
+      initial;
+      edge c_on goto On;
+    location On:
+      edge c_off, c_emrgStop goto Off;
+  end
+  plant automaton Locked:
+    uncontrollable u_locked_on;
+    uncontrollable u_locked_off;
+    location Off:
+      edge u_locked_on when Position.h >= 2.0 goto On;
+    location On:
+      initial;
+      marked;
+      edge u_locked_off when Position.h < 2.0 goto Off;
+  end
+  plant automaton Unlocked:
+    uncontrollable u_unlocked_on;
+    uncontrollable u_unlocked_off;
+    location Off:
+      initial;
+      marked;
+      edge u_unlocked_on when Position.h <= 0.0 goto On;
+    location On:
+      edge u_unlocked_off when Position.h > 0.0 goto Off;
+  end
+  automaton Diagnose_lockingMechismStuck:
+    alg bool fault = Stuck;
+    cont t = 0.0 der if DiagnosingOpening or DiagnosingClosing: -1.0 else 0.0 end;
+    alg bool I_o = sup.LM.Locked.On;
+    alg bool I_c = sup.LM.Unlocked.On;
+    alg bool Q_o = sup.LM.Valve.Lock;
+    alg bool Q_c = sup.LM.Valve.Unlock;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_o = Tmax_LockingMLock;
+    alg real t_c = Tmax_LockingMUnlock;
+    location NoDefect:
+      initial;
+      edge when Q_o do t := t_o goto DiagnosingOpening;
+      edge when Q_c do t := t_c goto DiagnosingClosing;
+    location DiagnosingOpening:
+      edge when t <= 0 and Q_o and not I_o goto Stuck;
+      edge when not Q_o goto NoDefect;
+    location DiagnosingClosing:
+      edge when t <= 0 and Q_c and not I_c goto Stuck;
+      edge when not Q_c goto NoDefect;
+    location Stuck:
+      edge when Reset goto NoDefect;
+  end
+  automaton Diagnose_lockingMechismUndesiredUnlock:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.LM.Locked.On;
+    alg bool Q = sup.LM.Valve.Unlock and sup.LM.Pump.On;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_lockingMechism;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  group Position:
+    cont h = 2.0 der if h < 2.0 and Pump.On and Valve.Lock and not LM_verstoring.LM_vast: +1.0 elif h > 0.0 and Pump.On and Valve.Unlock and not LM_verstoring.LM_vast: -1.0 elif h > 0.0 and LM_verstoring.LM_omlaag: -0.2 elif h < 2.0 and LM_verstoring.LM_omhoog: +0.2 else 0.0 end;
+  end
+  automaton LM_verstoring:
+    uncontrollable u_f7;
+    uncontrollable u_f8;
+    uncontrollable u_f8b;
+    disc bool LM_omlaag = false;
+    disc bool LM_vast = false;
+    disc bool LM_omhoog = false;
+    location:
+      initial;
+      edge u_f7 do LM_vast := not LM_vast;
+      edge u_f8 do LM_omlaag := not LM_omlaag;
+      edge u_f8b do LM_omhoog := not LM_omhoog;
+  end
+end
+automaton LMLockedTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.5;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton LMUnlockedTimer100:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 0.1;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+automaton LMUnlockedTimer3:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 3.0;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+group BD:
+  alg bool fault = DeceleratingDiagnoser.fault or DiagnoseUnexpectedClose.fault or DiagnoseUnexpectedOpening.fault;
+  const real C = 0.0;
+  const real BC = 10.0;
+  const real BBC = 25.0;
+  const real O = 100.0;
+  const real BO = 90.0;
+  const real BBO = 75.0;
+  automaton Motor:
+    controllable c_on;
+    controllable c_off;
+    controllable c_emrgStop;
+    location Off:
+      initial;
+      edge c_on goto On;
+    location On:
+      edge c_off, c_emrgStop goto Off;
+  end
+  automaton Direction:
+    controllable c_open;
+    controllable c_close;
+    controllable c_stop;
+    controllable c_emrgStop;
+    location Idle:
+      initial;
+      edge c_open goto Opening;
+      edge c_close goto Closing;
+    location Opening:
+      edge c_stop, c_emrgStop goto Idle;
+    location Closing:
+      edge c_stop, c_emrgStop goto Idle;
+  end
+  automaton Speed:
+    controllable c_stop;
+    controllable c_fast;
+    controllable c_slow;
+    controllable c_emrgStop;
+    location Idle:
+      initial;
+      edge c_fast goto Fast;
+      edge c_slow goto Slow;
+    location Fast:
+      edge c_stop, c_emrgStop goto Idle;
+      edge c_slow goto Slow;
+    location Slow:
+      edge c_stop, c_emrgStop goto Idle;
+      edge c_fast goto Fast;
+  end
+  automaton Closed2:
+    uncontrollable u_closed2_on;
+    uncontrollable u_closed2_off;
+    location Off:
+      edge u_closed2_on when Positie.d <= C goto On;
+    location On:
+      initial;
+      edge u_closed2_off when Positie.d > C goto Off;
+  end
+  plant automaton Closed:
+    uncontrollable u_closed_on;
+    uncontrollable u_closed_off;
+    location Off:
+      edge u_closed_on when Positie.d <= C goto On;
+    location On:
+      initial;
+      marked;
+      edge u_closed_off when Positie.d > C goto Off;
+  end
+  plant automaton BClosed:
+    uncontrollable u_bClosed_on;
+    uncontrollable u_bClosed_off;
+    location Off:
+      edge u_bClosed_on when Positie.d <= BC goto On;
+    location On:
+      initial;
+      marked;
+      edge u_bClosed_off when Positie.d > BC goto Off;
+  end
+  plant automaton BBClosed:
+    uncontrollable u_bbClosed_on;
+    uncontrollable u_bbClosed_off;
+    location Off:
+      edge u_bbClosed_on when Positie.d <= BBC goto On;
+    location On:
+      initial;
+      marked;
+      edge u_bbClosed_off when Positie.d > BBC goto Off;
+  end
+  plant automaton BBOpen:
+    uncontrollable u_bbOpen_on;
+    uncontrollable u_bbOpen_off;
+    location Off:
+      initial;
+      marked;
+      edge u_bbOpen_on when Positie.d >= BBO goto On;
+    location On:
+      edge u_bbOpen_off when Positie.d < BBO goto Off;
+  end
+  plant automaton BOpen:
+    uncontrollable u_bOpen_on;
+    uncontrollable u_bOpen_off;
+    location Off:
+      initial;
+      marked;
+      edge u_bOpen_on when Positie.d >= BO goto On;
+    location On:
+      edge u_bOpen_off when Positie.d < BO goto Off;
+  end
+  plant automaton Open:
+    uncontrollable u_open_on;
+    uncontrollable u_open_off;
+    location Off:
+      initial;
+      marked;
+      edge u_open_on when Positie.d >= O goto On;
+    location On:
+      edge u_open_off when Positie.d < O goto Off;
+  end
+  automaton TimerBeforeBeforeOpen:
+    cont t = 0.0 der -1.0;
+    location Off:
+      initial;
+      edge when sup.BD.BBOpen.On do t := Tmin_BridgeOpen goto Running;
+    location Running:
+      edge when sup.BD.BBOpen.Off goto Off;
+      edge when t <= 0 goto Timeout;
+    location Timeout:
+      edge when sup.BD.BBOpen.Off goto Off;
+  end
+  automaton TimerBeforeBeforeClosed:
+    cont t = 0.0 der -1.0;
+    location Off:
+      initial;
+      edge when sup.BD.BBClosed.On do t := Tmin_BridgeClose goto Running;
+    location Running:
+      edge when sup.BD.BBClosed.Off goto Off;
+      edge when t <= 0 goto Timeout;
+    location Timeout:
+      edge when sup.BD.BBClosed.Off goto Off;
+  end
+  automaton DeceleratingDiagnoser:
+    alg bool Q_opening = sup.BD.Direction.Opening;
+    alg bool Q_closing = sup.BD.Direction.Closing;
+    location idle:
+      initial;
+      edge when Q_opening and TimerBeforeBeforeOpen.Running and sup.BD.BOpen.On goto fault;
+      edge when Q_closing and TimerBeforeBeforeClosed.Running and sup.BD.BClosed.On goto fault;
+    location fault:
+      edge when sup.ResetKnop.ResetStoring goto idle;
+  end
+  automaton DiagnoseUnexpectedClose:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.BD.Open.On;
+    alg bool Q = sup.BR.Sensor.Released;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_brug_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  automaton DiagnoseUnexpectedOpening:
+    alg bool fault = UnexpectedMovement;
+    cont t = 0.0 der if Diagnosing: -1.0 else 0.0 end;
+    alg bool I = sup.BD.Closed.On and sup.BD.Closed2.On;
+    alg bool Q = sup.BR.Sensor.Released;
+    alg bool Reset = sup.ResetKnop.ResetStoring;
+    alg real t_f = Tdisc_brug_es;
+    location NoEndPos:
+      initial;
+      edge when I and not Q goto EndPos;
+    location EndPos:
+      edge when not I and not Q do t := t_f goto Diagnosing;
+      edge when Q goto NoEndPos;
+    location Diagnosing:
+      edge when t <= 0 and not I and not Q goto UnexpectedMovement;
+      edge when I goto EndPos;
+      edge when Q goto NoEndPos;
+    location UnexpectedMovement:
+      edge when Reset goto NoEndPos;
+  end
+  group Positie:
+    cont d = 0.0 der if BR.Sensor.Applied and not UndesiredMovement.Close and not UndesiredMovement.Open: 0.0 elif d <= 100 and Motor.On and Direction.Opening and Speed.Fast: +10.0 elif d <= 100 and Motor.On and Direction.Opening and DeceleratingFault.Fault: +10.0 elif d <= 100 and Motor.On and Direction.Opening and Speed.Slow: +5.0 elif d >= 0 and Motor.On and Direction.Closing and Speed.Fast: -10.0 elif d >= 0 and Motor.On and Direction.Closing and DeceleratingFault.Fault: -10.0 elif d >= 0 and Motor.On and Direction.Closing and Speed.Slow: -5.0 elif d >= 0 and UndesiredMovement.Close: -10.0 elif d <= 100 and UndesiredMovement.Open: +10.0 else 0.0 end;
+  end
+  automaton UndesiredMovement:
+    uncontrollable u_f6_open;
+    uncontrollable u_f6_closed;
+    disc bool Open = false;
+    disc bool Close = false;
+    location:
+      initial;
+      edge u_f6_open do Open := not Open;
+      edge u_f6_closed do Close := not Close;
+  end
+  automaton DeceleratingFault:
+    uncontrollable u_f5;
+    disc bool Fault = false;
+    location:
+      initial;
+      edge u_f5 do Fault := not Fault;
+  end
+end
+automaton BDClosedTimer:
+  controllable c_start;
+  uncontrollable u_timeout;
+  cont t = 0.0 der -1.0;
+  alg real TimerLength = 3.0;
+  controllable c_stop;
+  location:
+    initial;
+    edge c_start do t := TimerLength;
+    edge u_timeout when t <= 0;
+end
+group BridgeCommands:
+  uncontrollable u_closeLT;
+  uncontrollable u_openLT;
+  uncontrollable u_openB;
+  uncontrollable u_closeB;
+  uncontrollable u_closeBB;
+  uncontrollable u_stop;
+  uncontrollable Done_u_closeLT;
+  uncontrollable Done_u_openLT;
+  uncontrollable Done_u_closeBB;
+  uncontrollable Done_BarrierOpen;
+  uncontrollable Done_u_openBRed;
+  uncontrollable Done_u_openBNotRed;
+  uncontrollable Done_u_closeB;
+  uncontrollable Done_8;
+  uncontrollable Done_9;
+  uncontrollable u_emerg;
+end
+group CommandVTL12:
+  uncontrollable u_red;
+  uncontrollable u_green;
+  uncontrollable u_emerg;
+  uncontrollable u_redRed;
+  uncontrollable u_r2Off;
+end
+group CommandVTL34:
+  uncontrollable u_red;
+  uncontrollable u_green;
+  uncontrollable u_emerg;
+  uncontrollable u_redRed;
+  uncontrollable u_r2Off;
+end
+group CommandVTL56:
+  uncontrollable u_red;
+  uncontrollable u_green;
+  uncontrollable u_emerg;
+  uncontrollable u_redRed;
+  uncontrollable u_r2Off;
+end
+group CommandVTL78:
+  uncontrollable u_red;
+  uncontrollable u_green;
+  uncontrollable u_emerg;
+  uncontrollable u_redRed;
+  uncontrollable u_r2Off;
+end
+plant automaton EmergencyStop:
+  uncontrollable u_emerg_on;
+  uncontrollable u_emerg_off;
+  location Inactive:
+    initial;
+    marked;
+    edge u_emerg_on goto Active;
+  location Active:
+    edge u_emerg_off goto Inactive;
+end
+automaton OverrideSwitch:
+  uncontrollable u_turn_on;
+  uncontrollable u_turn_off;
+  location Off:
+    initial;
+    marked;
+    edge u_turn_on goto On;
+  location On:
+    edge u_turn_off goto Off;
+end
+group sup:
+  alg bool emergency = EmergencyStop.Active or BD.NotDecelerating or BD.UndesiredClosed;
+  group Beveiligingen:
+    group VF2:
+      supervisor invariant .BB1.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
+      supervisor invariant .BB2.Actuator.c_close needs StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
+    end
+    group VF4:
+      supervisor invariant .LM.Pump.c_on needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Motor.c_on needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BR.Actuator.c_release needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .LM.Valve.c_lock needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .LM.Valve.c_unlock needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Direction.c_open needs BB1.Closed.On and BB2.Closed.On;
+      supervisor invariant .BD.Direction.c_close needs BB1.Closed.On and BB2.Closed.On;
+    end
+    group VF5:
+      supervisor invariant .VTL1.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL2.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL3.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL4.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL5.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL6.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL7.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+      supervisor invariant .VTL8.Actuator.c_green needs BD.Open.On and BR.Sensor.Applied and BR.Actuator.Apply;
+    end
+    group VF6A:
+      supervisor invariant .VTL3.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
+      supervisor invariant .VTL4.Actuator.c_green needs (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
+      supervisor invariant .VTL3.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
+      supervisor invariant .VTL4.Actuator.c_redGreen needs not VTL1.RedGreenAspect and not VTL2.RedGreenAspect;
+    end
+    group VF6B:
+      supervisor invariant .VTL1.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
+      supervisor invariant .VTL2.Actuator.c_green needs (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
+      supervisor invariant .VTL1.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
+      supervisor invariant .VTL2.Actuator.c_redGreen needs not VTL3.RedGreenAspect and not VTL4.RedGreenAspect;
+    end
+    group VF6C:
+      supervisor invariant .VTL7.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
+      supervisor invariant .VTL8.Actuator.c_green needs (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
+      supervisor invariant .VTL7.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
+      supervisor invariant .VTL8.Actuator.c_redGreen needs not VTL5.RedGreenAspect and not VTL6.RedGreenAspect;
+    end
+    group VF6D:
+      supervisor invariant .VTL5.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      supervisor invariant .VTL6.Actuator.c_green needs (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      supervisor invariant .VTL5.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
+      supervisor invariant .VTL6.Actuator.c_redGreen needs not VTL7.RedGreenAspect and not VTL8.RedGreenAspect;
+    end
+    group VF7:
+      alg bool redLampShown = (VTL1.Red.On or VTL2.Red.On) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff) and (VTL3.Red.On or VTL4.Red.On) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff) and (VTL5.Red.On or VTL6.Red.On) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff) and (VTL7.Red.On or VTL8.Red.On) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      alg bool RedAspectShown = (VTL1.RedAspect or VTL2.RedAspect) and (not VTL1.RedStaysOff or not VTL2.RedStaysOff) and (VTL3.RedAspect or VTL4.RedAspect) and (not VTL3.RedStaysOff or not VTL4.RedStaysOff) and (VTL5.RedAspect or VTL6.RedAspect) and (not VTL5.RedStaysOff or not VTL6.RedStaysOff) and (VTL7.RedAspect or VTL8.RedAspect) and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+      supervisor invariant .BD.Motor.c_on needs RedAspectShown or OverrideSwitch.On;
+      supervisor invariant .BR.Actuator.c_release needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Pump.c_on needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Valve.c_lock needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .LM.Valve.c_unlock needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .BD.Direction.c_open needs redLampShown or OverrideSwitch.On;
+      supervisor invariant .BD.Direction.c_close needs redLampShown or OverrideSwitch.On;
+    end
+    group VF8:
+      supervisor invariant .BB1.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
+      supervisor invariant .BB2.Actuator.c_open needs BD.Closed2.On and LM.Locked.On;
+    end
+    group VF10:
+      supervisor invariant .StopSigns.Actuator.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
+      supervisor invariant .BB.L.c_off needs BB1.Open.On and BB2.Open.On and BBsOpenTimer.Finished;
+    end
+    group VF11:
+      supervisor invariant .StopSigns.Actuator.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
+      supervisor invariant .BB.L.c_emrgOn needs BB1.UndesiredClosed or BB2.UndesiredClosed or BD.UndesiredOpen or LM.UndesiredUnlock;
+      supervisor invariant .StopSigns.Actuator.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
+      supervisor invariant .BB.L.c_off needs not BB1.UndesiredClosed and not BB2.UndesiredClosed and not BD.UndesiredOpen and not LM.UndesiredUnlock;
+    end
+    group VF13a:
+      supervisor invariant .VTL1.Activated.c_off needs VTL1.RedStaysOff;
+      supervisor invariant .VTL1.Activated.c_on needs not VTL1.RedStaysOff;
+    end
+    group VF13b:
+      supervisor invariant .VTL2.Activated.c_off needs VTL2.RedStaysOff;
+      supervisor invariant .VTL2.Activated.c_on needs not VTL2.RedStaysOff;
+    end
+    group VF13c:
+      supervisor invariant .VTL3.Activated.c_off needs VTL3.RedStaysOff;
+      supervisor invariant .VTL3.Activated.c_on needs not VTL3.RedStaysOff;
+    end
+    group VF13d:
+      supervisor invariant .VTL4.Activated.c_off needs VTL4.RedStaysOff;
+      supervisor invariant .VTL4.Activated.c_on needs not VTL4.RedStaysOff;
+    end
+    group VF13e:
+      supervisor invariant .VTL5.Activated.c_off needs VTL5.RedStaysOff;
+      supervisor invariant .VTL5.Activated.c_on needs not VTL5.RedStaysOff;
+    end
+    group VF13f:
+      supervisor invariant .VTL6.Activated.c_off needs VTL6.RedStaysOff;
+      supervisor invariant .VTL6.Activated.c_on needs not VTL6.RedStaysOff;
+    end
+    group VF13g:
+      supervisor invariant .VTL7.Activated.c_off needs VTL7.RedStaysOff;
+      supervisor invariant .VTL7.Activated.c_on needs not VTL7.RedStaysOff;
+    end
+    group VF13h:
+      supervisor invariant .VTL8.Activated.c_off needs VTL8.RedStaysOff;
+      supervisor invariant .VTL8.Activated.c_on needs not VTL8.RedStaysOff;
+    end
+  end
+  group Functioneel:
+    supervisor invariant .BB1.Actuator.c_close needs BB1.NotClosed.On;
+    supervisor invariant .BB2.Actuator.c_close needs BB2.NotClosed.On;
+    supervisor invariant .BB1.Actuator.c_close needs not BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_close needs not BB2.Stuck;
+    supervisor invariant .BB1.Actuator.c_open needs BB1.NotOpen.On;
+    supervisor invariant .BB2.Actuator.c_open needs BB2.NotOpen.On;
+    supervisor invariant .BB1.Actuator.c_open needs not BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_open needs not BB2.Stuck;
+    supervisor invariant .BB1.Actuator.c_stop needs BB1.Actuator.Closing and BB1ClosedTimer.Finished and BB1.NotClosed.Off or BB1.Actuator.Opening and BB1OpenTimer.Finished and BB1.NotOpen.Off or BB1.Stuck;
+    supervisor invariant .BB2.Actuator.c_stop needs BB2.Actuator.Closing and BB2ClosedTimer.Finished and BB2.NotClosed.Off or BB2.Actuator.Opening and BB2OpenTimer.Finished and BB2.NotOpen.Off or BB2.Stuck;
+    supervisor invariant .BR.Actuator.c_release needs BR.Release.On;
+    supervisor invariant .BR.Actuator.c_apply needs BR.Release.Off;
+    supervisor invariant .LM.Valve.c_unlock needs not LM.Unlocked.On and BD.Direction.Idle;
+    supervisor invariant .LM.Valve.c_lock needs not LM.Locked.On and BD.Closed.On and BD.Closed2.On and BR.Sensor.Applied and BD.Direction.Idle;
+    supervisor invariant .LM.Valve.c_stop needs LM.Valve.Unlock and LMUnlockedTimer100.Finished and LM.Unlocked.On or LM.Valve.Lock and LMLockedTimer.Finished and LM.Locked.On;
+    supervisor invariant .LM.Pump.c_on needs not LM.Valve.Idle;
+    supervisor invariant .LM.Pump.c_off needs LM.Valve.Idle;
+    supervisor invariant .BD.Motor.c_off needs not(BB1.Closed.On and BB2.Closed.On) or not Beveiligingen.VF7.redLampShown and not OverrideSwitch.On;
+    supervisor invariant .BD.Direction.c_open needs not BD.Open.On and LMUnlockedTimer3.Finished and LM.Unlocked.On;
+    supervisor invariant .BD.Direction.c_close needs not BD.Closed.On and LM.Unlocked.On;
+    supervisor invariant .BD.Direction.c_stop needs BD.Open.On and BD.Direction.Opening or BD.Closed.On and BDClosedTimer.Finished and BD.Direction.Closing;
+    supervisor invariant .BD.Speed.c_fast needs BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off;
+    supervisor invariant .BD.Speed.c_slow needs not(BD.Direction.Opening and BD.Open.Off and BD.BOpen.Off and BD.BBOpen.Off or BD.Direction.Closing and BD.Closed.Off and BD.BClosed.Off and BD.BBClosed.Off);
+    supervisor invariant .BD.Speed.c_slow needs BD.Direction.Opening and BD.Open.Off or BD.Direction.Closing and BD.Closed.Off;
+    supervisor invariant .BD.Speed.c_stop needs BD.Direction.Idle;
+  end
+  group GUI:
+    group emergencyStops:
+      supervisor invariant .BB1.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
+      supervisor invariant .BB2.Actuator.c_emrgStop needs emergency or BridgeCommands.StopBB;
+      supervisor invariant .BR.Actuator.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .LM.Valve.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .LM.Pump.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Motor.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Direction.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_emrgStop needs emergency or BridgeCommands.StopB;
+      supervisor invariant .BB1.Actuator.c_open needs not emergency;
+      supervisor invariant .BB1.Actuator.c_close needs not emergency;
+      supervisor invariant .BB2.Actuator.c_open needs not emergency;
+      supervisor invariant .BB2.Actuator.c_close needs not emergency;
+      supervisor invariant .BR.Actuator.c_release needs not emergency;
+      supervisor invariant .LM.Valve.c_unlock needs not emergency;
+      supervisor invariant .LM.Valve.c_lock needs not emergency;
+      supervisor invariant .LM.Pump.c_on needs not emergency;
+      supervisor invariant .BD.Direction.c_open needs not emergency;
+      supervisor invariant .BD.Direction.c_close needs not emergency;
+      supervisor invariant .BD.Speed.c_fast needs not emergency;
+      supervisor invariant .BD.Speed.c_slow needs not emergency;
+      supervisor invariant .BD.Motor.c_on needs not emergency;
+      supervisor invariant .BR.Actuator.c_release needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Motor.c_on needs not BridgeCommands.StopB;
+      supervisor invariant .LM.Pump.c_on needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_fast needs not BridgeCommands.StopB;
+      supervisor invariant .BD.Speed.c_slow needs not BridgeCommands.StopB;
+    end
+    group GUI_VTL1:
+      supervisor invariant .VTL1.Actuator.c_red needs CommandVTL12.Red;
+      supervisor invariant .VTL1.Actuator.c_redRed needs CommandVTL12.RedRed;
+      supervisor invariant .VTL1.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
+      supervisor invariant .VTL1.Actuator.c_green needs CommandVTL12.Green and not emergency;
+      supervisor invariant .VTL1.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL2:
+      supervisor invariant .VTL2.Actuator.c_red needs CommandVTL12.Red;
+      supervisor invariant .VTL2.Actuator.c_redRed needs CommandVTL12.RedRed;
+      supervisor invariant .VTL2.Actuator.c_redGreen needs CommandVTL12.RedGreen and not emergency;
+      supervisor invariant .VTL2.Actuator.c_green needs CommandVTL12.Green and not emergency;
+      supervisor invariant .VTL2.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL3:
+      supervisor invariant .VTL3.Actuator.c_red needs CommandVTL34.Red;
+      supervisor invariant .VTL3.Actuator.c_redRed needs CommandVTL34.RedRed;
+      supervisor invariant .VTL3.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
+      supervisor invariant .VTL3.Actuator.c_green needs CommandVTL34.Green and not emergency;
+      supervisor invariant .VTL3.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL4:
+      supervisor invariant .VTL4.Actuator.c_red needs CommandVTL34.Red;
+      supervisor invariant .VTL4.Actuator.c_redRed needs CommandVTL34.RedRed;
+      supervisor invariant .VTL4.Actuator.c_redGreen needs CommandVTL34.RedGreen and not emergency;
+      supervisor invariant .VTL4.Actuator.c_green needs CommandVTL34.Green and not emergency;
+      supervisor invariant .VTL4.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL5:
+      supervisor invariant .VTL5.Actuator.c_red needs CommandVTL56.Red;
+      supervisor invariant .VTL5.Actuator.c_redRed needs CommandVTL56.RedRed;
+      supervisor invariant .VTL5.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
+      supervisor invariant .VTL5.Actuator.c_green needs CommandVTL56.Green and not emergency;
+      supervisor invariant .VTL5.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL6:
+      supervisor invariant .VTL6.Actuator.c_red needs CommandVTL56.Red;
+      supervisor invariant .VTL6.Actuator.c_redRed needs CommandVTL56.RedRed;
+      supervisor invariant .VTL6.Actuator.c_redGreen needs CommandVTL56.RedGreen and not emergency;
+      supervisor invariant .VTL6.Actuator.c_green needs CommandVTL56.Green and not emergency;
+      supervisor invariant .VTL6.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL7:
+      supervisor invariant .VTL7.Actuator.c_red needs CommandVTL78.Red;
+      supervisor invariant .VTL7.Actuator.c_redRed needs CommandVTL78.RedRed;
+      supervisor invariant .VTL7.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
+      supervisor invariant .VTL7.Actuator.c_green needs CommandVTL78.Green and not emergency;
+      supervisor invariant .VTL7.Actuator.c_emrg needs emergency;
+    end
+    group GUI_VTL8:
+      supervisor invariant .VTL8.Actuator.c_red needs CommandVTL78.Red;
+      supervisor invariant .VTL8.Actuator.c_redRed needs CommandVTL78.RedRed;
+      supervisor invariant .VTL8.Actuator.c_redGreen needs CommandVTL78.RedGreen and not emergency;
+      supervisor invariant .VTL8.Actuator.c_green needs CommandVTL78.Green and not emergency;
+      supervisor invariant .VTL8.Actuator.c_emrg needs emergency;
+    end
+    supervisor invariant .StopSigns.Actuator.c_on needs BridgeCommands.CloseLT;
+    supervisor invariant .BB.L.c_on needs BridgeCommands.CloseLT;
+    supervisor invariant .BB1.Actuator.c_close needs BridgeCommands.CloseBB;
+    supervisor invariant .BB2.Actuator.c_close needs BridgeCommands.CloseBB;
+    supervisor invariant .BD.Direction.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .LM.Valve.c_unlock needs BridgeCommands.OpenB;
+    supervisor invariant .BD.Direction.c_close needs BridgeCommands.CloseB;
+    supervisor invariant .LM.Valve.c_lock needs BridgeCommands.CloseB;
+    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .StopSigns.Actuator.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
+    supervisor invariant .BB.L.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
+  end
+  group StopSigns:
+    alg bool S1StaysOff = .StopSigns.DiagnoseSS1.StaysOff;
+    alg bool S2StaysOff = .StopSigns.DiagnoseSS2.StaysOff;
+    alg bool S3StaysOff = .StopSigns.DiagnoseSS3.StaysOff;
+    alg bool S4StaysOff = .StopSigns.DiagnoseSS4.StaysOff;
+    alg bool S5StaysOff = .StopSigns.DiagnoseSS5.StaysOff;
+    plant automaton Actuator:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.Actuator.c_on goto On;
+        edge .StopSigns.Actuator.c_emrgOn goto On;
+      location On:
+        edge .StopSigns.Actuator.c_off goto Off;
+    end
+    plant automaton S1:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.S1.u_on goto On;
+      location On:
+        edge .StopSigns.S1.u_off goto Off;
+    end
+    plant automaton S2:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.S2.u_on goto On;
+      location On:
+        edge .StopSigns.S2.u_off goto Off;
+    end
+    plant automaton S3:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.S3.u_on goto On;
+      location On:
+        edge .StopSigns.S3.u_off goto Off;
+    end
+    plant automaton S4:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.S4.u_on goto On;
+      location On:
+        edge .StopSigns.S4.u_off goto Off;
+    end
+    plant automaton S5:
+      location Off:
+        initial;
+        marked;
+        edge .StopSigns.S5.u_on goto On;
+      location On:
+        edge .StopSigns.S5.u_off goto Off;
+    end
+  end
+  plant automaton SSsOnTimer:
+    alg bool StartCondition = StopSigns.S1.On and StopSigns.S4.On;
+    location Off:
+      initial;
+      marked;
+      edge .SSsOnTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .SSsOnTimer.c_stop when not StartCondition goto Off;
+      edge .SSsOnTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .SSsOnTimer.c_stop when not StartCondition goto Off;
+  end
+  group BB:
+    plant automaton L:
+      location Off:
+        initial;
+        marked;
+        edge .BB.L.c_on goto On;
+        edge .BB.L.c_emrgOn goto On;
+      location On:
+        edge .BB.L.c_off goto Off;
+    end
+    plant automaton Alternate:
+      location Mode1:
+        initial;
+        marked;
+        edge .BB.Alternate.c_mode2 goto Mode2;
+      location Mode2:
+        marked;
+        edge .BB.Alternate.c_mode1 goto Mode1;
+    end
+  end
+  group BB1:
+    alg bool Stuck = .BB1.DiagnoseBBStuck.fault;
+    alg bool UndesiredClosed = .BB1.DiagnoseBBUndesiredClosed.fault;
+    alg bool UndesiredOpen = .BB1.DiagnoseBBUndesiredOpen.fault;
+    plant automaton Actuator:
+      location Idle:
+        initial;
+        marked;
+        edge .BB1.Actuator.c_open goto Opening;
+        edge .BB1.Actuator.c_close goto Closing;
+      location Opening:
+        edge .BB1.Actuator.c_stop, .BB1.Actuator.c_emrgStop goto Idle;
+      location Closing:
+        edge .BB1.Actuator.c_stop, .BB1.Actuator.c_emrgStop goto Idle;
+    end
+    plant automaton Open:
+      location Off:
+        edge .BB1.Open.u_open_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BB1.Open.u_open_off goto Off;
+    end
+    plant automaton Closed:
+      location Off:
+        initial;
+        marked;
+        edge .BB1.Closed.u_closed_on goto On;
+      location On:
+        edge .BB1.Closed.u_closed_off goto Off;
+    end
+    plant automaton NotOpen:
+      location Off:
+        initial;
+        marked;
+        edge .BB1.NotOpen.u_notOpen_on goto On;
+      location On:
+        edge .BB1.NotOpen.u_notOpen_off goto Off;
+    end
+    plant automaton NotClosed:
+      location Off:
+        edge .BB1.NotClosed.u_notClosed_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BB1.NotClosed.u_notClosed_off goto Off;
+    end
+  end
+  group BB2:
+    alg bool Stuck = .BB2.DiagnoseBBStuck.fault;
+    alg bool UndesiredClosed = .BB2.DiagnoseBBUndesiredClosed.fault;
+    alg bool UndesiredOpen = .BB2.DiagnoseBBUndesiredOpen.fault;
+    plant automaton Actuator:
+      location Idle:
+        initial;
+        marked;
+        edge .BB2.Actuator.c_open goto Opening;
+        edge .BB2.Actuator.c_close goto Closing;
+      location Opening:
+        edge .BB2.Actuator.c_stop, .BB2.Actuator.c_emrgStop goto Idle;
+      location Closing:
+        edge .BB2.Actuator.c_stop, .BB2.Actuator.c_emrgStop goto Idle;
+    end
+    plant automaton Open:
+      location Off:
+        edge .BB2.Open.u_open_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BB2.Open.u_open_off goto Off;
+    end
+    plant automaton Closed:
+      location Off:
+        initial;
+        marked;
+        edge .BB2.Closed.u_closed_on goto On;
+      location On:
+        edge .BB2.Closed.u_closed_off goto Off;
+    end
+    plant automaton NotOpen:
+      location Off:
+        initial;
+        marked;
+        edge .BB2.NotOpen.u_notOpen_on goto On;
+      location On:
+        edge .BB2.NotOpen.u_notOpen_off goto Off;
+    end
+    plant automaton NotClosed:
+      location Off:
+        edge .BB2.NotClosed.u_notClosed_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BB2.NotClosed.u_notClosed_off goto Off;
+    end
+  end
+  plant automaton BBsOpenTimer:
+    alg bool StartCondition = BB1.Open.On and BB2.Open.On;
+    location Off:
+      initial;
+      marked;
+      edge .BBsOpenTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BBsOpenTimer.c_stop when not StartCondition goto Off;
+      edge .BBsOpenTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BBsOpenTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton BB1OpenTimer:
+    alg bool StartCondition = BB1.Open.On;
+    location Off:
+      initial;
+      marked;
+      edge .BB1OpenTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BB1OpenTimer.c_stop when not StartCondition goto Off;
+      edge .BB1OpenTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BB1OpenTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton BB1ClosedTimer:
+    alg bool StartCondition = BB1.Closed.On;
+    location Off:
+      initial;
+      marked;
+      edge .BB1ClosedTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BB1ClosedTimer.c_stop when not StartCondition goto Off;
+      edge .BB1ClosedTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BB1ClosedTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton BB2OpenTimer:
+    alg bool StartCondition = BB2.Open.On;
+    location Off:
+      initial;
+      marked;
+      edge .BB2OpenTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BB2OpenTimer.c_stop when not StartCondition goto Off;
+      edge .BB2OpenTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BB2OpenTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton BB2ClosedTimer:
+    alg bool StartCondition = BB2.Closed.On;
+    location Off:
+      initial;
+      marked;
+      edge .BB2ClosedTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BB2ClosedTimer.c_stop when not StartCondition goto Off;
+      edge .BB2ClosedTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BB2ClosedTimer.c_stop when not StartCondition goto Off;
+  end
+  group VTL1:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL1.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL1.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL1.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL1.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL1.Actuator.c_redGreen goto RedGreen;
+        edge .VTL1.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL1.Actuator.c_red goto Red;
+        edge .VTL1.Actuator.c_green goto Green;
+        edge .VTL1.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL1.Actuator.c_red goto Red;
+        edge .VTL1.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL1.Activated.c_off goto Off;
+      location Off:
+        edge .VTL1.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL1.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL1.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL1.Green.u_green_on goto On;
+      location On:
+        edge .VTL1.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL1.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL1.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL2:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL2.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL2.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL2.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL2.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL2.Actuator.c_redGreen goto RedGreen;
+        edge .VTL2.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL2.Actuator.c_red goto Red;
+        edge .VTL2.Actuator.c_green goto Green;
+        edge .VTL2.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL2.Actuator.c_red goto Red;
+        edge .VTL2.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL2.Activated.c_off goto Off;
+      location Off:
+        edge .VTL2.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL2.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL2.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL2.Green.u_green_on goto On;
+      location On:
+        edge .VTL2.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL2.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL2.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL3:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL3.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL3.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL3.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL3.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL3.Actuator.c_redGreen goto RedGreen;
+        edge .VTL3.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL3.Actuator.c_red goto Red;
+        edge .VTL3.Actuator.c_green goto Green;
+        edge .VTL3.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL3.Actuator.c_red goto Red;
+        edge .VTL3.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL3.Activated.c_off goto Off;
+      location Off:
+        edge .VTL3.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL3.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL3.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL3.Green.u_green_on goto On;
+      location On:
+        edge .VTL3.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL3.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL3.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL4:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL4.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL4.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL4.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL4.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL4.Actuator.c_redGreen goto RedGreen;
+        edge .VTL4.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL4.Actuator.c_red goto Red;
+        edge .VTL4.Actuator.c_green goto Green;
+        edge .VTL4.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL4.Actuator.c_red goto Red;
+        edge .VTL4.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL4.Activated.c_off goto Off;
+      location Off:
+        edge .VTL4.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL4.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL4.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL4.Green.u_green_on goto On;
+      location On:
+        edge .VTL4.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL4.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL4.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL5:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL5.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL5.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL5.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL5.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL5.Actuator.c_redGreen goto RedGreen;
+        edge .VTL5.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL5.Actuator.c_red goto Red;
+        edge .VTL5.Actuator.c_green goto Green;
+        edge .VTL5.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL5.Actuator.c_red goto Red;
+        edge .VTL5.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL5.Activated.c_off goto Off;
+      location Off:
+        edge .VTL5.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL5.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL5.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL5.Green.u_green_on goto On;
+      location On:
+        edge .VTL5.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL5.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL5.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL6:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL6.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL6.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL6.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL6.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL6.Actuator.c_redGreen goto RedGreen;
+        edge .VTL6.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL6.Actuator.c_red goto Red;
+        edge .VTL6.Actuator.c_green goto Green;
+        edge .VTL6.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL6.Actuator.c_red goto Red;
+        edge .VTL6.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL6.Activated.c_off goto Off;
+      location Off:
+        edge .VTL6.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL6.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL6.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL6.Green.u_green_on goto On;
+      location On:
+        edge .VTL6.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL6.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL6.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL7:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL7.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL7.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL7.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL7.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL7.Actuator.c_redGreen goto RedGreen;
+        edge .VTL7.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL7.Actuator.c_red goto Red;
+        edge .VTL7.Actuator.c_green goto Green;
+        edge .VTL7.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL7.Actuator.c_red goto Red;
+        edge .VTL7.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL7.Activated.c_off goto Off;
+      location Off:
+        edge .VTL7.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL7.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL7.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL7.Green.u_green_on goto On;
+      location On:
+        edge .VTL7.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL7.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL7.Red2.u_red2_off goto Off;
+    end
+  end
+  group VTL8:
+    alg bool RedAspect = Red.On and Green.Off;
+    alg bool RedGreenAspect = Red.On and Green.On;
+    alg bool RedStaysOff = .VTL8.DiagnoseRed.StaysOff;
+    alg bool GreenStaysOff = .VTL8.DiagnoseGreen.StaysOff;
+    alg bool Red2StaysOff = .VTL8.DiagnoseRed2.StaysOff;
+    alg bool Fault = RedStaysOff or GreenStaysOff or Red2StaysOff;
+    plant automaton Actuator:
+      location RedRed:
+        edge .VTL8.Actuator.c_red goto Red;
+      location Red:
+        initial;
+        marked;
+        edge .VTL8.Actuator.c_redGreen goto RedGreen;
+        edge .VTL8.Actuator.c_redRed goto RedRed;
+      location RedGreen:
+        edge .VTL8.Actuator.c_red goto Red;
+        edge .VTL8.Actuator.c_green goto Green;
+        edge .VTL8.Actuator.c_emrg goto Red;
+      location Green:
+        edge .VTL8.Actuator.c_red goto Red;
+        edge .VTL8.Actuator.c_emrg goto Red;
+    end
+    plant automaton Activated:
+      location On:
+        initial;
+        marked;
+        edge .VTL8.Activated.c_off goto Off;
+      location Off:
+        edge .VTL8.Activated.c_on goto On;
+    end
+    plant automaton Red:
+      location Off:
+        edge .VTL8.Red.u_red_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .VTL8.Red.u_red_off goto Off;
+    end
+    plant automaton Green:
+      location Off:
+        initial;
+        marked;
+        edge .VTL8.Green.u_green_on goto On;
+      location On:
+        edge .VTL8.Green.u_green_off goto Off;
+    end
+    plant automaton Red2:
+      location Off:
+        initial;
+        marked;
+        edge .VTL8.Red2.u_red2_on goto On;
+      location On:
+        marked;
+        edge .VTL8.Red2.u_red2_off goto Off;
+    end
+  end
+  group BR:
+    plant automaton Actuator:
+      location Apply:
+        initial;
+        marked;
+        edge .BR.Actuator.c_release goto Release;
+      location Release:
+        edge .BR.Actuator.c_apply goto Apply;
+        edge .BR.Actuator.c_emrgStop goto Apply;
+    end
+    plant automaton Sensor:
+      location Applied:
+        initial;
+        marked;
+        edge .BR.Sensor.u_released goto Released;
+      location Released:
+        edge .BR.Sensor.u_applied goto Applied;
+    end
+    plant automaton Release:
+      location Off:
+        initial;
+        marked;
+        edge .BR.Release.u_release goto On;
+      location On:
+        edge .BR.Release.u_apply goto Off;
+    end
+  end
+  group LM:
+    alg bool Stuck = .LM.Diagnose_lockingMechismStuck.fault;
+    alg bool UndesiredUnlock = .LM.Diagnose_lockingMechismUndesiredUnlock.fault;
+    plant automaton Valve:
+      location Idle:
+        initial;
+        marked;
+        edge .LM.Valve.c_lock goto Lock;
+        edge .LM.Valve.c_unlock goto Unlock;
+      location Lock:
+        edge .LM.Valve.c_stop, .LM.Valve.c_emrgStop goto Idle;
+      location Unlock:
+        edge .LM.Valve.c_stop, .LM.Valve.c_emrgStop goto Idle;
+    end
+    plant automaton Pump:
+      location Off:
+        initial;
+        marked;
+        edge .LM.Pump.c_on goto On;
+      location On:
+        edge .LM.Pump.c_off, .LM.Pump.c_emrgStop goto Off;
+    end
+    plant automaton Locked:
+      location Off:
+        edge .LM.Locked.u_locked_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .LM.Locked.u_locked_off goto Off;
+    end
+    plant automaton Unlocked:
+      location Off:
+        initial;
+        marked;
+        edge .LM.Unlocked.u_unlocked_on goto On;
+      location On:
+        edge .LM.Unlocked.u_unlocked_off goto Off;
+    end
+  end
+  plant automaton LMLockedTimer:
+    alg bool StartCondition = LM.Locked.On;
+    location Off:
+      initial;
+      marked;
+      edge .LMLockedTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .LMLockedTimer.c_stop when not StartCondition goto Off;
+      edge .LMLockedTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .LMLockedTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton LMUnlockedTimer100:
+    alg bool StartCondition = LM.Unlocked.On;
+    location Off:
+      initial;
+      marked;
+      edge .LMUnlockedTimer100.c_start when StartCondition goto Running;
+    location Running:
+      edge .LMUnlockedTimer100.c_stop when not StartCondition goto Off;
+      edge .LMUnlockedTimer100.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .LMUnlockedTimer100.c_stop when not StartCondition goto Off;
+  end
+  plant automaton LMUnlockedTimer3:
+    alg bool StartCondition = LM.Unlocked.On;
+    location Off:
+      initial;
+      marked;
+      edge .LMUnlockedTimer3.c_start when StartCondition goto Running;
+    location Running:
+      edge .LMUnlockedTimer3.c_stop when not StartCondition goto Off;
+      edge .LMUnlockedTimer3.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .LMUnlockedTimer3.c_stop when not StartCondition goto Off;
+  end
+  group BD:
+    alg bool NotDecelerating = .BD.DeceleratingDiagnoser.fault;
+    alg bool UndesiredClosed = .BD.DiagnoseUnexpectedClose.fault;
+    alg bool UndesiredOpen = .BD.DiagnoseUnexpectedOpening.fault;
+    plant automaton Motor:
+      location Off:
+        initial;
+        marked;
+        edge .BD.Motor.c_on goto On;
+      location On:
+        edge .BD.Motor.c_off goto Off;
+        edge .BD.Motor.c_emrgStop goto Off;
+    end
+    plant automaton Direction:
+      location Idle:
+        initial;
+        marked;
+        edge .BD.Direction.c_open goto Opening;
+        edge .BD.Direction.c_close goto Closing;
+      location Opening:
+        edge .BD.Direction.c_stop, .BD.Direction.c_emrgStop goto Idle;
+      location Closing:
+        edge .BD.Direction.c_stop, .BD.Direction.c_emrgStop goto Idle;
+    end
+    plant automaton Speed:
+      location Idle:
+        initial;
+        marked;
+        edge .BD.Speed.c_fast goto Fast;
+        edge .BD.Speed.c_slow goto Slow;
+      location Fast:
+        edge .BD.Speed.c_stop, .BD.Speed.c_emrgStop goto Idle;
+        edge .BD.Speed.c_slow goto Slow;
+      location Slow:
+        edge .BD.Speed.c_stop, .BD.Speed.c_emrgStop goto Idle;
+        edge .BD.Speed.c_fast goto Fast;
+    end
+    plant automaton Closed2:
+      location Off:
+        edge .BD.Closed2.u_closed2_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BD.Closed2.u_closed2_off goto Off;
+    end
+    plant automaton Closed:
+      location Off:
+        edge .BD.Closed.u_closed_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BD.Closed.u_closed_off goto Off;
+    end
+    plant automaton BClosed:
+      location Off:
+        edge .BD.BClosed.u_bClosed_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BD.BClosed.u_bClosed_off goto Off;
+    end
+    plant automaton BBClosed:
+      location Off:
+        edge .BD.BBClosed.u_bbClosed_on goto On;
+      location On:
+        initial;
+        marked;
+        edge .BD.BBClosed.u_bbClosed_off goto Off;
+    end
+    plant automaton BBOpen:
+      location Off:
+        initial;
+        marked;
+        edge .BD.BBOpen.u_bbOpen_on goto On;
+      location On:
+        edge .BD.BBOpen.u_bbOpen_off goto Off;
+    end
+    plant automaton BOpen:
+      location Off:
+        initial;
+        marked;
+        edge .BD.BOpen.u_bOpen_on goto On;
+      location On:
+        edge .BD.BOpen.u_bOpen_off goto Off;
+    end
+    plant automaton Open:
+      location Off:
+        initial;
+        marked;
+        edge .BD.Open.u_open_on goto On;
+      location On:
+        edge .BD.Open.u_open_off goto Off;
+    end
+  end
+  plant automaton BDClosedTimer:
+    alg bool StartCondition = BD.Closed.On;
+    location Off:
+      initial;
+      marked;
+      edge .BDClosedTimer.c_start when StartCondition goto Running;
+    location Running:
+      edge .BDClosedTimer.c_stop when not StartCondition goto Off;
+      edge .BDClosedTimer.u_timeout goto Finished;
+    location Finished:
+      marked;
+      edge .BDClosedTimer.c_stop when not StartCondition goto Off;
+  end
+  plant automaton BridgeCommands:
+    monitor .BridgeCommands.u_closeLT, .BridgeCommands.u_openLT, .BridgeCommands.u_openB, .BridgeCommands.u_closeB, .BridgeCommands.u_closeBB, .BridgeCommands.u_stop;
+    alg bool CloseLT = L11;
+    alg bool OpenLT = L13;
+    alg bool CloseBB = L15;
+    alg bool OpenBB = L17 or L13;
+    alg bool StopBB = L16;
+    alg bool OpenB = L21;
+    alg bool CloseB = L23;
+    alg bool StopB = L22;
+    alg bool CloseLT_act = L11;
+    alg bool CloseLT_bdb = L10 or L11 or L12 or StopSignsOn;
+    alg bool OpenLT_act = L13 or L17;
+    alg bool OpenLT_bdb = L12 or L14 or L16 or L17 or L20;
+    alg bool Stop_act = L12 or L16 or L22;
+    alg bool Stop_bdb = L11 or L12 or L13 or L15 or L16 or L17 or L21 or L22 or L23;
+    alg bool CloseBB_act = L15;
+    alg bool CloseBB_bdb = L14 or L15 or L16;
+    alg bool OpenB_act = L21;
+    alg bool OpenB_bdb = L20 or L21 or L22;
+    alg bool CloseB_act = L23;
+    alg bool CloseB_bdb = L22 or L23 or L31;
+    alg bool Window1CloseAble = L10 or L14 or L20 or L30 or L31;
+    alg bool Window2CloseAble = L10 or L14 or L20 or L30 or L31;
+    alg bool Window1Visible = L10 or L11 or L12 or L13 or L14 or L15 or L16 or L17;
+    alg bool Window2Visible = L20 or L21 or L22 or L23 or L30 or L31;
+    alg bool Red = (VTL1.RedAspect or VTL2.RedAspect) and (VTL3.RedAspect or VTL4.RedAspect) and (VTL5.RedAspect or VTL6.RedAspect) and (VTL7.RedAspect or VTL8.RedAspect) and VTL1.Green.Off and VTL2.Green.Off and VTL3.Green.Off and VTL4.Green.Off and VTL5.Green.Off and VTL6.Green.Off and VTL7.Green.Off and VTL8.Green.Off;
+    alg bool closeBBd = BB1.Closed.On and BB2.Closed.On;
+    alg bool BridgeMayNotMove = VTL1.Fault and VTL2.Fault or VTL3.Fault and VTL4.Fault or VTL5.Fault and VTL6.Fault or VTL7.Fault and VTL8.Fault or not closeBBd;
+    alg bool StopSignsOn = StopSigns.S1.On and StopSigns.S4.On and SSsOnTimer.Finished;
+    location L10:
+      initial;
+      marked;
+      edge .BridgeCommands.u_closeLT goto L11;
+    location L11:
+      edge .BridgeCommands.u_stop goto L12;
+      edge .BridgeCommands.u_emerg when emergency goto L12;
+      edge .BridgeCommands.Done_u_closeLT when StopSignsOn goto L14;
+    location L12:
+      edge .BridgeCommands.u_closeLT goto L11;
+      edge .BridgeCommands.u_openLT goto L13;
+    location L13:
+      edge .BridgeCommands.u_stop goto L12;
+      edge .BridgeCommands.u_emerg when emergency goto L12;
+      edge .BridgeCommands.Done_u_openLT when StopSigns.Actuator.Off goto L10;
+    location L14:
+      edge .BridgeCommands.u_openLT goto L13;
+      edge .BridgeCommands.u_closeBB when StopSignsOn goto L15;
+    location L15:
+      edge .BridgeCommands.u_stop goto L16;
+      edge .BridgeCommands.u_emerg when EmergencyStop.Active goto L16;
+      edge .BridgeCommands.Done_u_closeBB when BB1.Closed.On and BB2.Closed.On goto L20;
+    location L16:
+      edge .BridgeCommands.u_closeBB goto L15;
+      edge .BridgeCommands.u_openLT goto L17;
+    location L17:
+      edge .BridgeCommands.Done_BarrierOpen when BB1.Open.On and BB2.Open.On goto L13;
+      edge .BridgeCommands.u_stop goto L16;
+      edge .BridgeCommands.u_emerg when EmergencyStop.Active goto L16;
+    location L20:
+      edge .BridgeCommands.u_openB when not BridgeMayNotMove or OverrideSwitch.On goto L21;
+      edge .BridgeCommands.u_openLT goto L17;
+    location L21:
+      edge .BridgeCommands.u_stop goto L22;
+      edge .BridgeCommands.u_emerg when EmergencyStop.Active goto L22;
+      edge .BridgeCommands.Done_u_openBRed when Red and BD.Open.On goto L31;
+      edge .BridgeCommands.Done_u_openBNotRed when not Red and BD.Open.On goto L30;
+    location L22:
+      edge .BridgeCommands.u_openB goto L21;
+      edge .BridgeCommands.u_closeB goto L23;
+    location L23:
+      edge .BridgeCommands.u_stop goto L22;
+      edge .BridgeCommands.u_emerg when EmergencyStop.Active goto L22;
+      edge .BridgeCommands.Done_u_closeB when BD.Closed.On and LM.Locked.On goto L20;
+    location L30:
+      edge .BridgeCommands.Done_8 when Red or OverrideSwitch.On goto L31;
+    location L31:
+      edge .BridgeCommands.u_closeB goto L23;
+      edge .BridgeCommands.Done_9 when not Red and not OverrideSwitch.On goto L30;
+  end
+  plant automaton CommandVTL12:
+    monitor .CommandVTL12.u_red, .CommandVTL12.u_green, u_r2, .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed;
+    alg bool GreenOk = not CommandVTL34.Green and BD.Open.On and (not VTL3.RedStaysOff or not VTL4.RedStaysOff);
+    alg bool RedGreenOk = not VTL3.Actuator.RedGreen and not VTL4.Actuator.RedGreen and not BridgeCommands.CloseB_act;
+    alg bool allRed = Red and CommandVTL34.Red and CommandVTL56.Red and CommandVTL78.Red;
+    alg bool emrgStop = BridgeCommands.StopB or EmergencyStop.Active;
+    location RedRed:
+      edge u_r2Off goto Red;
+    location Red:
+      initial;
+      marked;
+      edge .CommandVTL12.u_green when RedGreenOk goto RedGreen;
+      edge u_r2 when allRed goto RedRed;
+    location RedGreen:
+      edge .CommandVTL12.u_red goto Red;
+      edge .CommandVTL12.u_emerg when emrgStop goto Red;
+      edge .CommandVTL12.u_green when GreenOk goto Green;
+      edge .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed when GreenOk goto Green;
+    location Green:
+      edge .CommandVTL12.u_red goto Red;
+      edge .CommandVTL12.u_emerg when emrgStop goto Red;
+  end
+  plant automaton CommandVTL34:
+    monitor .CommandVTL34.u_red, .CommandVTL34.u_green, u_r2, .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed;
+    alg bool GreenOk = not CommandVTL12.Green and BD.Open.On and (not VTL1.RedStaysOff or not VTL2.RedStaysOff);
+    alg bool RedGreenOk = not VTL1.Actuator.RedGreen and not VTL2.Actuator.RedGreen and not BridgeCommands.CloseB_act;
+    alg bool allRed = CommandVTL12.Red and Red and CommandVTL56.Red and CommandVTL78.Red;
+    alg bool emrgStop = BridgeCommands.StopB or EmergencyStop.Active;
+    location RedRed:
+      edge u_r2Off goto Red;
+    location Red:
+      initial;
+      marked;
+      edge .CommandVTL34.u_green when RedGreenOk goto RedGreen;
+      edge u_r2 when allRed goto RedRed;
+    location RedGreen:
+      edge .CommandVTL34.u_red goto Red;
+      edge .CommandVTL34.u_emerg when emrgStop goto Red;
+      edge .CommandVTL34.u_green when GreenOk goto Green;
+      edge .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed when GreenOk goto Green;
+    location Green:
+      edge .CommandVTL34.u_red goto Red;
+      edge .CommandVTL34.u_emerg when emrgStop goto Red;
+  end
+  plant automaton CommandVTL56:
+    monitor .CommandVTL56.u_red, .CommandVTL56.u_green, u_r2, .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed;
+    alg bool GreenOk = not CommandVTL78.Green and BD.Open.On and (not VTL7.RedStaysOff or not VTL8.RedStaysOff);
+    alg bool RedGreenOk = not VTL7.Actuator.RedGreen and not VTL8.Actuator.RedGreen and not BridgeCommands.CloseB_act;
+    alg bool allRed = CommandVTL12.Red and CommandVTL34.Red and Red and CommandVTL78.Red;
+    alg bool emrgStop = BridgeCommands.StopB or EmergencyStop.Active;
+    location RedRed:
+      edge u_r2Off goto Red;
+    location Red:
+      initial;
+      marked;
+      edge .CommandVTL56.u_green when RedGreenOk goto RedGreen;
+      edge u_r2 when allRed goto RedRed;
+    location RedGreen:
+      edge .CommandVTL56.u_red goto Red;
+      edge .CommandVTL56.u_emerg when emrgStop goto Red;
+      edge .CommandVTL56.u_green when GreenOk goto Green;
+      edge .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed when GreenOk goto Green;
+    location Green:
+      edge .CommandVTL56.u_red goto Red;
+      edge .CommandVTL56.u_emerg when emrgStop goto Red;
+  end
+  plant automaton CommandVTL78:
+    monitor .CommandVTL78.u_red, .CommandVTL78.u_green, u_r2, .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed;
+    alg bool GreenOk = not CommandVTL56.Green and BD.Open.On and (not VTL5.RedStaysOff or not VTL6.RedStaysOff);
+    alg bool RedGreenOk = not VTL5.Actuator.RedGreen and not VTL6.Actuator.RedGreen and not BridgeCommands.CloseB_act;
+    alg bool allRed = CommandVTL12.Red and CommandVTL34.Red and CommandVTL56.Red and Red;
+    alg bool emrgStop = BridgeCommands.StopB or EmergencyStop.Active;
+    location RedRed:
+      edge u_r2Off goto Red;
+    location Red:
+      initial;
+      marked;
+      edge .CommandVTL78.u_green when RedGreenOk goto RedGreen;
+      edge u_r2 when allRed goto RedRed;
+    location RedGreen:
+      edge .CommandVTL78.u_red goto Red;
+      edge .CommandVTL78.u_emerg when emrgStop goto Red;
+      edge .CommandVTL78.u_green when GreenOk goto Green;
+      edge .BridgeCommands.Done_u_openBRed, .BridgeCommands.Done_u_openBNotRed when GreenOk goto Green;
+    location Green:
+      edge .CommandVTL78.u_red goto Red;
+      edge .CommandVTL78.u_emerg when emrgStop goto Red;
+  end
+  plant automaton EmergencyStop:
+    location Inactive:
+      initial;
+      marked;
+      edge .EmergencyStop.u_emerg_on goto Active;
+    location Active:
+      edge .EmergencyStop.u_emerg_off goto Inactive;
+  end
+  plant automaton OverrideSwitch:
+    location Off:
+      initial;
+      marked;
+      edge .OverrideSwitch.u_turn_on goto On;
+    location On:
+      edge .OverrideSwitch.u_turn_off goto Off;
+  end
+  supervisor automaton sup:
+    alphabet .StopSigns.Actuator.c_on, .StopSigns.Actuator.c_emrgOn, .StopSigns.Actuator.c_off, .SSsOnTimer.c_start, .SSsOnTimer.c_stop, .BB.L.c_on, .BB.L.c_emrgOn, .BB.L.c_off, .BB.Alternate.c_mode2, .BB.Alternate.c_mode1, .BB1.Actuator.c_open, .BB1.Actuator.c_close, .BB1.Actuator.c_stop, .BB1.Actuator.c_emrgStop, .BB2.Actuator.c_open, .BB2.Actuator.c_close, .BB2.Actuator.c_stop, .BB2.Actuator.c_emrgStop, .BBsOpenTimer.c_start, .BBsOpenTimer.c_stop, .BB1OpenTimer.c_start, .BB1OpenTimer.c_stop, .BB1ClosedTimer.c_start, .BB1ClosedTimer.c_stop, .BB2OpenTimer.c_start, .BB2OpenTimer.c_stop, .BB2ClosedTimer.c_start, .BB2ClosedTimer.c_stop, .VTL1.Actuator.c_red, .VTL1.Actuator.c_redGreen, .VTL1.Actuator.c_redRed, .VTL1.Actuator.c_green, .VTL1.Actuator.c_emrg, .VTL1.Activated.c_off, .VTL1.Activated.c_on, .VTL2.Actuator.c_red, .VTL2.Actuator.c_redGreen, .VTL2.Actuator.c_redRed, .VTL2.Actuator.c_green, .VTL2.Actuator.c_emrg, .VTL2.Activated.c_off, .VTL2.Activated.c_on, .VTL3.Actuator.c_red, .VTL3.Actuator.c_redGreen, .VTL3.Actuator.c_redRed, .VTL3.Actuator.c_green, .VTL3.Actuator.c_emrg, .VTL3.Activated.c_off, .VTL3.Activated.c_on, .VTL4.Actuator.c_red, .VTL4.Actuator.c_redGreen, .VTL4.Actuator.c_redRed, .VTL4.Actuator.c_green, .VTL4.Actuator.c_emrg, .VTL4.Activated.c_off, .VTL4.Activated.c_on, .VTL5.Actuator.c_red, .VTL5.Actuator.c_redGreen, .VTL5.Actuator.c_redRed, .VTL5.Actuator.c_green, .VTL5.Actuator.c_emrg, .VTL5.Activated.c_off, .VTL5.Activated.c_on, .VTL6.Actuator.c_red, .VTL6.Actuator.c_redGreen, .VTL6.Actuator.c_redRed, .VTL6.Actuator.c_green, .VTL6.Actuator.c_emrg, .VTL6.Activated.c_off, .VTL6.Activated.c_on, .VTL7.Actuator.c_red, .VTL7.Actuator.c_redGreen, .VTL7.Actuator.c_redRed, .VTL7.Actuator.c_green, .VTL7.Actuator.c_emrg, .VTL7.Activated.c_off, .VTL7.Activated.c_on, .VTL8.Actuator.c_red, .VTL8.Actuator.c_redGreen, .VTL8.Actuator.c_redRed, .VTL8.Actuator.c_green, .VTL8.Actuator.c_emrg, .VTL8.Activated.c_off, .VTL8.Activated.c_on, .BR.Actuator.c_release, .BR.Actuator.c_apply, .BR.Actuator.c_emrgStop, .LM.Valve.c_lock, .LM.Valve.c_unlock, .LM.Valve.c_stop, .LM.Valve.c_emrgStop, .LM.Pump.c_on, .LM.Pump.c_off, .LM.Pump.c_emrgStop, .LMLockedTimer.c_start, .LMLockedTimer.c_stop, .LMUnlockedTimer100.c_start, .LMUnlockedTimer100.c_stop, .LMUnlockedTimer3.c_start, .LMUnlockedTimer3.c_stop, .BD.Motor.c_on, .BD.Motor.c_off, .BD.Motor.c_emrgStop, .BD.Direction.c_open, .BD.Direction.c_close, .BD.Direction.c_stop, .BD.Direction.c_emrgStop, .BD.Speed.c_fast, .BD.Speed.c_slow, .BD.Speed.c_stop, .BD.Speed.c_emrgStop, .BDClosedTimer.c_start, .BDClosedTimer.c_stop;
+    location:
+      initial;
+      marked;
+      edge .BB.Alternate.c_mode1 when true;
+      edge .BB.Alternate.c_mode2 when true;
+      edge .BB.L.c_emrgOn when true;
+      edge .BB.L.c_off when true;
+      edge .BB.L.c_on when true;
+      edge .BB1.Actuator.c_close when true;
+      edge .BB1.Actuator.c_emrgStop when true;
+      edge .BB1.Actuator.c_open when true;
+      edge .BB1.Actuator.c_stop when true;
+      edge .BB1ClosedTimer.c_start when true;
+      edge .BB1ClosedTimer.c_stop when true;
+      edge .BB1OpenTimer.c_start when true;
+      edge .BB1OpenTimer.c_stop when true;
+      edge .BB2.Actuator.c_close when true;
+      edge .BB2.Actuator.c_emrgStop when true;
+      edge .BB2.Actuator.c_open when true;
+      edge .BB2.Actuator.c_stop when true;
+      edge .BB2ClosedTimer.c_start when true;
+      edge .BB2ClosedTimer.c_stop when true;
+      edge .BB2OpenTimer.c_start when true;
+      edge .BB2OpenTimer.c_stop when true;
+      edge .BBsOpenTimer.c_start when true;
+      edge .BBsOpenTimer.c_stop when true;
+      edge .BD.Direction.c_close when true;
+      edge .BD.Direction.c_emrgStop when true;
+      edge .BD.Direction.c_open when true;
+      edge .BD.Direction.c_stop when true;
+      edge .BD.Motor.c_emrgStop when true;
+      edge .BD.Motor.c_off when true;
+      edge .BD.Motor.c_on when true;
+      edge .BD.Speed.c_emrgStop when true;
+      edge .BD.Speed.c_fast when true;
+      edge .BD.Speed.c_slow when true;
+      edge .BD.Speed.c_stop when true;
+      edge .BDClosedTimer.c_start when true;
+      edge .BDClosedTimer.c_stop when true;
+      edge .BR.Actuator.c_apply when true;
+      edge .BR.Actuator.c_emrgStop when true;
+      edge .BR.Actuator.c_release when true;
+      edge .LM.Pump.c_emrgStop when true;
+      edge .LM.Pump.c_off when true;
+      edge .LM.Pump.c_on when true;
+      edge .LM.Valve.c_emrgStop when true;
+      edge .LM.Valve.c_lock when true;
+      edge .LM.Valve.c_stop when true;
+      edge .LM.Valve.c_unlock when true;
+      edge .LMLockedTimer.c_start when true;
+      edge .LMLockedTimer.c_stop when true;
+      edge .LMUnlockedTimer100.c_start when true;
+      edge .LMUnlockedTimer100.c_stop when true;
+      edge .LMUnlockedTimer3.c_start when true;
+      edge .LMUnlockedTimer3.c_stop when true;
+      edge .SSsOnTimer.c_start when true;
+      edge .SSsOnTimer.c_stop when true;
+      edge .StopSigns.Actuator.c_emrgOn when true;
+      edge .StopSigns.Actuator.c_off when true;
+      edge .StopSigns.Actuator.c_on when true;
+      edge .VTL1.Activated.c_off when true;
+      edge .VTL1.Activated.c_on when true;
+      edge .VTL1.Actuator.c_emrg when true;
+      edge .VTL1.Actuator.c_green when true;
+      edge .VTL1.Actuator.c_red when true;
+      edge .VTL1.Actuator.c_redGreen when true;
+      edge .VTL1.Actuator.c_redRed when true;
+      edge .VTL2.Activated.c_off when true;
+      edge .VTL2.Activated.c_on when true;
+      edge .VTL2.Actuator.c_emrg when true;
+      edge .VTL2.Actuator.c_green when true;
+      edge .VTL2.Actuator.c_red when true;
+      edge .VTL2.Actuator.c_redGreen when true;
+      edge .VTL2.Actuator.c_redRed when true;
+      edge .VTL3.Activated.c_off when true;
+      edge .VTL3.Activated.c_on when true;
+      edge .VTL3.Actuator.c_emrg when true;
+      edge .VTL3.Actuator.c_green when true;
+      edge .VTL3.Actuator.c_red when true;
+      edge .VTL3.Actuator.c_redGreen when true;
+      edge .VTL3.Actuator.c_redRed when true;
+      edge .VTL4.Activated.c_off when true;
+      edge .VTL4.Activated.c_on when true;
+      edge .VTL4.Actuator.c_emrg when true;
+      edge .VTL4.Actuator.c_green when true;
+      edge .VTL4.Actuator.c_red when true;
+      edge .VTL4.Actuator.c_redGreen when true;
+      edge .VTL4.Actuator.c_redRed when true;
+      edge .VTL5.Activated.c_off when true;
+      edge .VTL5.Activated.c_on when true;
+      edge .VTL5.Actuator.c_emrg when true;
+      edge .VTL5.Actuator.c_green when true;
+      edge .VTL5.Actuator.c_red when true;
+      edge .VTL5.Actuator.c_redGreen when true;
+      edge .VTL5.Actuator.c_redRed when true;
+      edge .VTL6.Activated.c_off when true;
+      edge .VTL6.Activated.c_on when true;
+      edge .VTL6.Actuator.c_emrg when true;
+      edge .VTL6.Actuator.c_green when true;
+      edge .VTL6.Actuator.c_red when true;
+      edge .VTL6.Actuator.c_redGreen when true;
+      edge .VTL6.Actuator.c_redRed when true;
+      edge .VTL7.Activated.c_off when true;
+      edge .VTL7.Activated.c_on when true;
+      edge .VTL7.Actuator.c_emrg when true;
+      edge .VTL7.Actuator.c_green when true;
+      edge .VTL7.Actuator.c_red when true;
+      edge .VTL7.Actuator.c_redGreen when true;
+      edge .VTL7.Actuator.c_redRed when true;
+      edge .VTL8.Activated.c_off when true;
+      edge .VTL8.Activated.c_on when true;
+      edge .VTL8.Actuator.c_emrg when true;
+      edge .VTL8.Actuator.c_green when true;
+      edge .VTL8.Actuator.c_red when true;
+      edge .VTL8.Actuator.c_redGreen when true;
+      edge .VTL8.Actuator.c_redRed when true;
+  end
+  group ResetKnop:
+    alg bool ResetStoring = .ResetKnop.ResetStoringen;
+  end
+end
+group ResetButton:
+  alg string Label = "Resetknop";
+  alg bool State = sup.ResetKnop.ResetStoring;
+  svgin id Label event ResetKnop.u_reset file "../Simulation/plant.svg";
+  svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+end
+group V_StopSign1:
+  alg bool enabled = StopSigns.S1.On;
+  alg string svgOutID = "Stop1";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_StopSign2:
+  alg bool enabled = StopSigns.S2.On;
+  alg string svgOutID = "Stop2";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_StopSign3:
+  alg bool enabled = StopSigns.S3.On;
+  alg string svgOutID = "Stop3";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_StopSign4:
+  alg bool enabled = StopSigns.S4.On;
+  alg string svgOutID = "Stop4";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_StopSign5:
+  alg bool enabled = StopSigns.S5.On;
+  alg string svgOutID = "Stop5";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL1_R:
+  alg bool enabled = VTL1.Red.On;
+  alg string svgOutID = "VTL1_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL1_G:
+  alg bool enabled = VTL1.Green.On;
+  alg string svgOutID = "VTL1_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL1_S:
+  alg bool enabled = VTL1.Red2.On;
+  alg string svgOutID = "VTL1_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL2_R:
+  alg bool enabled = VTL2.Red.On;
+  alg string svgOutID = "VTL2_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL2_G:
+  alg bool enabled = VTL2.Green.On;
+  alg string svgOutID = "VTL2_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL2_S:
+  alg bool enabled = VTL2.Red2.On;
+  alg string svgOutID = "VTL2_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL3_R:
+  alg bool enabled = VTL3.Red.On;
+  alg string svgOutID = "VTL3_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL3_G:
+  alg bool enabled = VTL3.Green.On;
+  alg string svgOutID = "VTL3_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL3_S:
+  alg bool enabled = VTL3.Red2.On;
+  alg string svgOutID = "VTL3_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL4_R:
+  alg bool enabled = VTL4.Red.On;
+  alg string svgOutID = "VTL4_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL4_G:
+  alg bool enabled = VTL4.Green.On;
+  alg string svgOutID = "VTL4_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL4_S:
+  alg bool enabled = VTL4.Red2.On;
+  alg string svgOutID = "VTL4_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL5_R:
+  alg bool enabled = VTL5.Red.On;
+  alg string svgOutID = "VTL5_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL5_G:
+  alg bool enabled = VTL5.Green.On;
+  alg string svgOutID = "VTL5_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL5_S:
+  alg bool enabled = VTL5.Red2.On;
+  alg string svgOutID = "VTL5_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL6_R:
+  alg bool enabled = VTL6.Red.On;
+  alg string svgOutID = "VTL6_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL6_G:
+  alg bool enabled = VTL6.Green.On;
+  alg string svgOutID = "VTL6_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL6_S:
+  alg bool enabled = VTL6.Red2.On;
+  alg string svgOutID = "VTL6_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL7_R:
+  alg bool enabled = VTL7.Red.On;
+  alg string svgOutID = "VTL7_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL7_G:
+  alg bool enabled = VTL7.Green.On;
+  alg string svgOutID = "VTL7_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL7_S:
+  alg bool enabled = VTL7.Red2.On;
+  alg string svgOutID = "VTL7_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL8_R:
+  alg bool enabled = VTL8.Red.On;
+  alg string svgOutID = "VTL8_R";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL8_G:
+  alg bool enabled = VTL8.Green.On;
+  alg string svgOutID = "VTL8_G";
+  alg string color = "green";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_VTL8_S:
+  alg bool enabled = VTL8.Red2.On;
+  alg string svgOutID = "VTL8_S";
+  alg string color = "red";
+  svgout id svgOutID attr "fill" value if enabled: color else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_BoomBarrier1:
+  alg bool open = BB1.Open.On;
+  alg bool on = BB.L.On;
+  alg bool flash = BB.Alternate.Mode2;
+  alg int svgOutID = 1;
+  alg real degree = BB1.Positie.d;
+  svgout id "BB" + <string>svgOutID attr "visibility" value if open: "hidden" else "visible" end file "../Simulation/plant.svg";
+  svgout id "BBW" + <string>svgOutID attr "width" value scale(degree, 0, 100, 84, 0.1) file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_1" attr "fill" value if on and flash: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_2" attr "fill" value if on and not flash: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_3" attr "fill" value if on: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_BoomBarrier2:
+  alg bool open = BB2.Open.On;
+  alg bool on = BB.L.On;
+  alg bool flash = BB.Alternate.Mode2;
+  alg int svgOutID = 2;
+  alg real degree = BB2.Positie.d;
+  svgout id "BB" + <string>svgOutID attr "visibility" value if open: "hidden" else "visible" end file "../Simulation/plant.svg";
+  svgout id "BBW" + <string>svgOutID attr "width" value scale(degree, 0, 100, 84, 0.1) file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_1" attr "fill" value if on and flash: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_2" attr "fill" value if on and not flash: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+  svgout id "BB" + <string>svgOutID + "_3" attr "fill" value if on: "red" else "#e6e6e6" end file "../Simulation/plant.svg";
+end
+group V_bridge:
+  svgout id "bridge" attr "transform" value fmt("rotate(%s,386.5,468)", scale(BD.Positie.d, 0, 100, 0, 90)) file "../Simulation/plant.svg";
+end
+group Faults:
+  group S1_Fault:
+    alg string Label = "button_S1_defect";
+    alg bool State = StopSigns.S1Fault.Defect;
+    svgin id Label event StopSigns.S1Fault.u_f file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group S2_Fault:
+    alg string Label = "button_S2_defect";
+    alg bool State = StopSigns.S2Fault.Defect;
+    svgin id Label event StopSigns.S2Fault.u_f file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group S3_Fault:
+    alg string Label = "button_S3_defect";
+    alg bool State = StopSigns.S3Fault.Defect;
+    svgin id Label event StopSigns.S3Fault.u_f file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group S4_Fault:
+    alg string Label = "button_S4_defect";
+    alg bool State = StopSigns.S4Fault.Defect;
+    svgin id Label event StopSigns.S4Fault.u_f file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group S5_Fault:
+    alg string Label = "button_S5_defect";
+    alg bool State = StopSigns.S5Fault.Defect;
+    svgin id Label event StopSigns.S5Fault.u_f file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL1_RedFault:
+    alg string Label = "button_VTL1_defect";
+    alg bool State = VTL1.VTL_defect.RedLampDefect;
+    svgin id Label event VTL1.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL2_RedFault:
+    alg string Label = "button_VTL2_defect";
+    alg bool State = VTL2.VTL_defect.RedLampDefect;
+    svgin id Label event VTL2.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL3_RedFault:
+    alg string Label = "button_VTL3_defect";
+    alg bool State = VTL3.VTL_defect.RedLampDefect;
+    svgin id Label event VTL3.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL4_RedFault:
+    alg string Label = "button_VTL4_defect";
+    alg bool State = VTL4.VTL_defect.RedLampDefect;
+    svgin id Label event VTL4.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL5_RedFault:
+    alg string Label = "button_VTL5_defect";
+    alg bool State = VTL5.VTL_defect.RedLampDefect;
+    svgin id Label event VTL5.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL6_RedFault:
+    alg string Label = "button_VTL6_defect";
+    alg bool State = VTL6.VTL_defect.RedLampDefect;
+    svgin id Label event VTL6.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL7_RedFault:
+    alg string Label = "button_VTL7_defect";
+    alg bool State = VTL7.VTL_defect.RedLampDefect;
+    svgin id Label event VTL7.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL8_RedFault:
+    alg string Label = "button_VTL8_defect";
+    alg bool State = VTL8.VTL_defect.RedLampDefect;
+    svgin id Label event VTL8.VTL_defect.u_f2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL1_GreenFault:
+    alg string Label = "button_VTL1_green_defect";
+    alg bool State = VTL1.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL1.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL2_GreenFault:
+    alg string Label = "button_VTL2_green_defect";
+    alg bool State = VTL2.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL2.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL3_GreenFault:
+    alg string Label = "button_VTL3_green_defect";
+    alg bool State = VTL3.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL3.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL4_GreenFault:
+    alg string Label = "button_VTL4_green_defect";
+    alg bool State = VTL4.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL4.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL5_GreenFault:
+    alg string Label = "button_VTL5_green_defect";
+    alg bool State = VTL5.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL5.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL6_GreenFault:
+    alg string Label = "button_VTL6_green_defect";
+    alg bool State = VTL6.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL6.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL7_GreenFault:
+    alg string Label = "button_VTL7_green_defect";
+    alg bool State = VTL7.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL7.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL8_GreenFault:
+    alg string Label = "button_VTL8_green_defect";
+    alg bool State = VTL8.VTL_defect.GreenLampDefect;
+    svgin id Label event VTL8.VTL_defect.u_f2_1 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL1_Red2Fault:
+    alg string Label = "button_VTL1_red2_defect";
+    alg bool State = VTL1.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL1.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL2_Red2Fault:
+    alg string Label = "button_VTL2_red2_defect";
+    alg bool State = VTL2.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL2.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL3_Red2Fault:
+    alg string Label = "button_VTL3_red2_defect";
+    alg bool State = VTL3.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL3.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL4_Red2Fault:
+    alg string Label = "button_VTL4_red2_defect";
+    alg bool State = VTL4.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL4.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL5_Red2Fault:
+    alg string Label = "button_VTL5_red2_defect";
+    alg bool State = VTL5.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL5.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL6_Red2Fault:
+    alg string Label = "button_VTL6_red2_defect";
+    alg bool State = VTL6.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL6.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL7_Red2Fault:
+    alg string Label = "button_VTL7_red2_defect";
+    alg bool State = VTL7.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL7.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group VTL8_Red2Fault:
+    alg string Label = "button_VTL8_red2_defect";
+    alg bool State = VTL8.VTL_defect.Red2LampDefect;
+    svgin id Label event VTL8.VTL_defect.u_f2_2 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB1_Fault:
+    alg string Label = "button_BB1_defect";
+    alg bool State = BB1.Fault.Stuck;
+    svgin id Label event BB1.Fault.u_f3 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB2_Fault:
+    alg string Label = "button_BB2_defect";
+    alg bool State = BB2.Fault.Stuck;
+    svgin id Label event BB2.Fault.u_f3 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB1_undesired_closed:
+    alg string Label = "button_BB1_close";
+    alg bool State = BB1.Fault.UndesiredClose;
+    svgin id Label event BB1.Fault.u_f4_closed file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB1_undesired_open:
+    alg string Label = "button_BB1_open";
+    alg bool State = BB1.Fault.UndesiredOpen;
+    svgin id Label event BB1.Fault.u_f4_open file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB2_undesired_closed:
+    alg string Label = "button_BB2_close";
+    alg bool State = BB2.Fault.UndesiredClose;
+    svgin id Label event BB2.Fault.u_f4_closed file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group BB2_undesired_open:
+    alg string Label = "button_BB2_open";
+    alg bool State = BB2.Fault.UndesiredOpen;
+    svgin id Label event BB2.Fault.u_f4_open file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group LM_Stuck:
+    alg string Label = "button_lockingMechanism_stuck";
+    alg bool State = LM.LM_verstoring.LM_vast;
+    svgin id Label event LM.LM_verstoring.u_f7 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group LM_Unlock:
+    alg string Label = "button_lockingMechanism_unlock";
+    alg bool State = LM.LM_verstoring.LM_omlaag;
+    svgin id Label event LM.LM_verstoring.u_f8 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group LM_Lock:
+    alg string Label = "button_lockingMechanism_lock";
+    alg bool State = LM.LM_verstoring.LM_omhoog;
+    svgin id Label event LM.LM_verstoring.u_f8b file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group Bridge_NotDecelerating:
+    alg string Label = "button_FO_defect";
+    alg bool State = BD.DeceleratingFault.Fault;
+    svgin id Label event BD.DeceleratingFault.u_f5 file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group Bridge_undesired_open:
+    alg string Label = "button_bridge_undesired_open";
+    alg bool State = BD.UndesiredMovement.Open;
+    svgin id Label event BD.UndesiredMovement.u_f6_open file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+  group Bridge_undesired_closed:
+    alg string Label = "button_bridge_undesired_close";
+    alg bool State = BD.UndesiredMovement.Close;
+    svgin id Label event BD.UndesiredMovement.u_f6_closed file "../Simulation/plant.svg";
+    svgout id Label attr "fill" value if State: "darkorange" else "lightgrey" end file "../Simulation/plant.svg";
+  end
+end
+group vDiagnosers:
+  group SS1Fault:
+    alg string Label = "SS1_defect";
+    alg bool State = sup.StopSigns.S1StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group SS2Fault:
+    alg string Label = "SS2_defect";
+    alg bool State = sup.StopSigns.S2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group SS3Fault:
+    alg string Label = "SS3_defect";
+    alg bool State = sup.StopSigns.S3StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group SS4Fault:
+    alg string Label = "SS4_defect";
+    alg bool State = sup.StopSigns.S4StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group SS5Fault:
+    alg string Label = "SS5_defect";
+    alg bool State = sup.StopSigns.S5StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL1RedStaysOff:
+    alg string Label = "Red_VTL1_defect";
+    alg bool State = sup.VTL1.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL2RedStaysOff:
+    alg string Label = "Red_VTL2_defect";
+    alg bool State = sup.VTL2.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL3RedStaysOff:
+    alg string Label = "Red_VTL3_defect";
+    alg bool State = sup.VTL3.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL4RedStaysOff:
+    alg string Label = "Red_VTL4_defect";
+    alg bool State = sup.VTL4.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL5RedStaysOff:
+    alg string Label = "Red_VTL5_defect";
+    alg bool State = sup.VTL5.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL6RedStaysOff:
+    alg string Label = "Red_VTL6_defect";
+    alg bool State = sup.VTL6.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL7RedStaysOff:
+    alg string Label = "Red_VTL7_defect";
+    alg bool State = sup.VTL7.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL8RedStaysOff:
+    alg string Label = "Red_VTL8_defect";
+    alg bool State = sup.VTL8.RedStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL1GreenStaysOff:
+    alg string Label = "Green_VTL1_defect";
+    alg bool State = sup.VTL1.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL2GreenStaysOff:
+    alg string Label = "Green_VTL2_defect";
+    alg bool State = sup.VTL2.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL3GreenStaysOff:
+    alg string Label = "Green_VTL3_defect";
+    alg bool State = sup.VTL3.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL4GreenStaysOff:
+    alg string Label = "Green_VTL4_defect";
+    alg bool State = sup.VTL4.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL5GreenStaysOff:
+    alg string Label = "Green_VTL5_defect";
+    alg bool State = sup.VTL5.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL6GreenStaysOff:
+    alg string Label = "Green_VTL6_defect";
+    alg bool State = sup.VTL6.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL7GreenStaysOff:
+    alg string Label = "Green_VTL7_defect";
+    alg bool State = sup.VTL7.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL8GreenStaysOff:
+    alg string Label = "Green_VTL8_defect";
+    alg bool State = sup.VTL8.GreenStaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL1Red2StaysOff:
+    alg string Label = "Red2_VTL1_defect";
+    alg bool State = sup.VTL1.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL2Red2StaysOff:
+    alg string Label = "Red2_VTL2_defect";
+    alg bool State = sup.VTL2.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL3Red2StaysOff:
+    alg string Label = "Red2_VTL3_defect";
+    alg bool State = sup.VTL3.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL4Red2StaysOff:
+    alg string Label = "Red2_VTL4_defect";
+    alg bool State = sup.VTL4.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL5Red2StaysOff:
+    alg string Label = "Red2_VTL5_defect";
+    alg bool State = sup.VTL5.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL6Red2StaysOff:
+    alg string Label = "Red2_VTL6_defect";
+    alg bool State = sup.VTL6.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL7Red2StaysOff:
+    alg string Label = "Red2_VTL7_defect";
+    alg bool State = sup.VTL7.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group VTL8Red2StaysOff:
+    alg string Label = "Red2_VTL8_defect";
+    alg bool State = sup.VTL8.Red2StaysOff;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB1Fault:
+    alg string Label = "BB1_Defect";
+    alg bool State = sup.BB1.Stuck;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB2Fault:
+    alg string Label = "BB2_Defect";
+    alg bool State = sup.BB2.Stuck;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB1UndesiredClose:
+    alg string Label = "BB1_UndesiredClose";
+    alg bool State = sup.BB1.UndesiredClosed;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB2UndesiredClose:
+    alg string Label = "BB2_UndesiredClose";
+    alg bool State = sup.BB2.UndesiredClosed;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB1UndesiredOpen:
+    alg string Label = "BB1_UndesiredOpen";
+    alg bool State = sup.BB1.UndesiredOpen;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BB2UndesiredOpen:
+    alg string Label = "BB2_UndesiredOpen";
+    alg bool State = sup.BB2.UndesiredOpen;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group LMStuck:
+    alg string Label = "LockingMechanism_vast";
+    alg bool State = sup.LM.Stuck;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group LMUnlock:
+    alg string Label = "LockingMechanism_omlaag";
+    alg bool State = sup.LM.UndesiredUnlock;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BDNotDecelerating:
+    alg string Label = "FO_defect";
+    alg bool State = sup.BD.NotDecelerating;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BDUndesiredOpen:
+    alg string Label = "Bridge_undesired_open";
+    alg bool State = sup.BD.UndesiredOpen;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+  group BDUndesiredClosed:
+    alg string Label = "Bridge_undesired_close";
+    alg bool State = sup.BD.UndesiredClosed;
+    svgout id Label attr "fill" value if State: "darkorange" else "black" end file "../Simulation/plant.svg";
+  end
+end
+automaton ResetKnop:
+  disc bool ResetStoringen = false;
+  uncontrollable u_reset;
+  location:
+    initial;
+    edge u_reset do ResetStoringen := not ResetStoringen;
+end
+group V_ButtonVTL12:
+  alg string n = "12";
+  alg bool sper = sup.CommandVTL12.RedRed;
+  alg bool red = sup.CommandVTL12.Red;
+  alg bool redGreen = sup.CommandVTL12.RedGreen;
+  alg bool green = sup.CommandVTL12.Green;
+  alg bool fault = VTL1.fault and VTL2.fault;
+  svgin id "VTL" + n + "_R" event if sper: u_r2Off else CommandVTL12.u_red end file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_G" event CommandVTL12.u_green file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_S" event u_r2 file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_R" attr "fill" value if sper or red or redGreen: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_G" attr "fill" value if redGreen or green: "#009900" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_S" attr "fill" value if sper: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "vtl" + n attr "fill" value if fault: "#FF0000" else "black" end file "../Simulation/UI.svg";
+end
+group V_ButtonVTL34:
+  alg string n = "34";
+  alg bool sper = sup.CommandVTL34.RedRed;
+  alg bool red = sup.CommandVTL34.Red;
+  alg bool redGreen = sup.CommandVTL34.RedGreen;
+  alg bool green = sup.CommandVTL34.Green;
+  alg bool fault = VTL3.fault and VTL4.fault;
+  svgin id "VTL" + n + "_R" event if sper: u_r2Off else CommandVTL34.u_red end file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_G" event CommandVTL34.u_green file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_S" event u_r2 file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_R" attr "fill" value if sper or red or redGreen: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_G" attr "fill" value if redGreen or green: "#009900" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_S" attr "fill" value if sper: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "vtl" + n attr "fill" value if fault: "#FF0000" else "black" end file "../Simulation/UI.svg";
+end
+group V_ButtonVTL56:
+  alg string n = "56";
+  alg bool sper = sup.CommandVTL56.RedRed;
+  alg bool red = sup.CommandVTL56.Red;
+  alg bool redGreen = sup.CommandVTL56.RedGreen;
+  alg bool green = sup.CommandVTL56.Green;
+  alg bool fault = VTL5.fault and VTL6.fault;
+  svgin id "VTL" + n + "_R" event if sper: u_r2Off else CommandVTL56.u_red end file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_G" event CommandVTL56.u_green file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_S" event u_r2 file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_R" attr "fill" value if sper or red or redGreen: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_G" attr "fill" value if redGreen or green: "#009900" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_S" attr "fill" value if sper: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "vtl" + n attr "fill" value if fault: "#FF0000" else "black" end file "../Simulation/UI.svg";
+end
+group V_ButtonVTL78:
+  alg string n = "78";
+  alg bool sper = sup.CommandVTL78.RedRed;
+  alg bool red = sup.CommandVTL78.Red;
+  alg bool redGreen = sup.CommandVTL78.RedGreen;
+  alg bool green = sup.CommandVTL78.Green;
+  alg bool fault = VTL7.fault and VTL8.fault;
+  svgin id "VTL" + n + "_R" event if sper: u_r2Off else CommandVTL78.u_red end file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_G" event CommandVTL78.u_green file "../Simulation/UI.svg";
+  svgin id "VTL" + n + "_S" event u_r2 file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_R" attr "fill" value if sper or red or redGreen: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_G" attr "fill" value if redGreen or green: "#009900" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "VTL" + n + "_S" attr "fill" value if sper: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "vtl" + n attr "fill" value if fault: "#FF0000" else "black" end file "../Simulation/UI.svg";
+end
+group V_StopSigns:
+  svgout id "SS1" attr "fill" value if sup.StopSigns.Actuator.On: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "SS4" attr "fill" value if sup.StopSigns.Actuator.On: "#FF0000" else "#999999" end file "../Simulation/UI.svg";
+  svgout id "SS123" attr "fill" value if StopSigns.fault123: "#FF0000" else "black" end file "../Simulation/UI.svg";
+  svgout id "SS45" attr "fill" value if StopSigns.fault45: "#FF0000" else "black" end file "../Simulation/UI.svg";
+end
+group V_Asb1:
+  svgout id "BB1" attr "fill" value if BB1.fault: "#FF0000" elif not sup.BB1.Actuator.Idle: "#FFFF00" else "#FFFFFF" end file "../Simulation/UI.svg";
+  svgout id "BB1in" attr "fill" value if BB1.fault: "#FF0000" elif not sup.BB1.Actuator.Idle: "#FFFF00" elif sup.BB1.NotClosed.Off: "#FFFFFF" else "#999999" end file "../Simulation/UI.svg";
+end
+group V_Asb2:
+  svgout id "BB2" attr "fill" value if BB2.fault: "#FF0000" elif not sup.BB2.Actuator.Idle: "#FFFF00" else "#FFFFFF" end file "../Simulation/UI.svg";
+  svgout id "BB2in" attr "fill" value if BB2.fault: "#FF0000" elif not sup.BB2.Actuator.Idle: "#FFFF00" elif sup.BB2.NotClosed.Off: "#FFFFFF" else "#999999" end file "../Simulation/UI.svg";
+end
+group V_Bridge:
+  svgout id "brug" attr "fill" value if BD.fault: "#FF0000" elif sup.BridgeCommands.OpenB_act or sup.BridgeCommands.CloseB_act: "#FFFF00" else "#FFFFFF" end file "../Simulation/UI.svg";
+  svgout id "brug" attr "transform" value fmt("rotate(%s,-280,565)", if sup.BD.Closed.On: 0 elif sup.BD.Open.On: 90 else 45 end) file "../Simulation/UI.svg";
+end
+group V_SCADA:
+  svgin id "CloseLT" event BridgeCommands.u_closeLT file "../Simulation/UI.svg";
+  svgin id "CloseBB" event BridgeCommands.u_closeBB file "../Simulation/UI.svg";
+  svgin id "OpenLT1" event BridgeCommands.u_openLT file "../Simulation/UI.svg";
+  svgin id "OpenLT2" event BridgeCommands.u_openLT file "../Simulation/UI.svg";
+  svgin id "OpenB" event BridgeCommands.u_openB file "../Simulation/UI.svg";
+  svgin id "CloseB" event BridgeCommands.u_closeB file "../Simulation/UI.svg";
+  svgin id "BStop1" event BridgeCommands.u_stop file "../Simulation/UI.svg";
+  svgin id "BStop2" event BridgeCommands.u_stop file "../Simulation/UI.svg";
+  svgin id "ButtonEmergencyStop" event if EmergencyStop.Inactive: EmergencyStop.u_emerg_on else EmergencyStop.u_emerg_off end file "../Simulation/UI.svg";
+  svgout id "ButtonEmergencyStop" attr "fill" value if EmergencyStop.Inactive: "green" else "red" end file "../Simulation/UI.svg";
+  svgout id "CloseLTB" attr "fill" value if sup.BridgeCommands.CloseLT_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "CloseBBB" attr "fill" value if sup.BridgeCommands.CloseBB_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "OpenLT1B" attr "fill" value if sup.BridgeCommands.OpenLT_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "OpenLT2B" attr "fill" value if sup.BridgeCommands.OpenLT_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "OpenB-B" attr "fill" value if sup.BridgeCommands.OpenB_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "CloseB-B" attr "fill" value if sup.BridgeCommands.CloseB_act: "yellow" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "Stop1B" attr "fill" value if sup.BridgeCommands.Stop_act: "red" elif sup.BridgeCommands.Stop_bdb: "pink" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "Stop2B" attr "fill" value if sup.BridgeCommands.Stop_act: "red" elif sup.BridgeCommands.Stop_bdb: "pink" else "#e6e6e6" end file "../Simulation/UI.svg";
+  svgout id "CloseLT" attr "opacity" value if sup.BridgeCommands.CloseLT_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "CloseBB" attr "opacity" value if sup.BridgeCommands.CloseBB_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "OpenLT1" attr "opacity" value if sup.BridgeCommands.OpenLT_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "OpenLT2" attr "opacity" value if sup.BridgeCommands.OpenLT_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "OpenB" attr "opacity" value if sup.BridgeCommands.OpenB_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "CloseB" attr "opacity" value if sup.BridgeCommands.CloseB_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "BStop1" attr "opacity" value if sup.BridgeCommands.Stop_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+  svgout id "BStop2" attr "opacity" value if sup.BridgeCommands.Stop_bdb: "1.0" else "0.2" end file "../Simulation/UI.svg";
+end
+automaton Window:
+  monitor showW1, showW2;
+  event showW1;
+  event showW2;
+  event hideW1;
+  event hideW2;
+  disc bool W1 = false;
+  disc bool W2 = false;
+  svgout id "W1close" attr "visibility" value if sup.BridgeCommands.Window1CloseAble and W1: "visible" else "hidden" end file "../Simulation/UI.svg";
+  svgout id "W2close" attr "visibility" value if sup.BridgeCommands.Window2CloseAble and W2: "visible" else "hidden" end file "../Simulation/UI.svg";
+  svgout id "Window1" attr "visibility" value if W1: "visible" else "hidden" end file "../Simulation/UI.svg";
+  svgout id "Window2" attr "visibility" value if W2: "visible" else "hidden" end file "../Simulation/UI.svg";
+  svgin id "brug" event if sup.BridgeCommands.Window1Visible: showW1 else showW2 end file "../Simulation/UI.svg";
+  svgin id "W1close" event hideW1 file "../Simulation/UI.svg";
+  svgin id "W2close" event hideW2 file "../Simulation/UI.svg";
+  location:
+    initial;
+    edge showW1 when sup.BridgeCommands.Window1Visible do W1 := true;
+    edge showW2 when sup.BridgeCommands.Window2Visible do W2 := true;
+    edge hideW1 do W1 := false;
+    edge hideW2 do W2 := false;
+end
+svgin id "overruleSwitch_off" event OverrideSwitch.u_turn_off file "../Simulation/plant.svg";
+svgin id "overruleSwitch_on" event OverrideSwitch.u_turn_on file "../Simulation/plant.svg";
+svgout id "overruleSwitch_off" attr "fill" value if OverrideSwitch.Off: "none" else "green" end file "../Simulation/plant.svg";
+svgout id "overruleSwitch_on" attr "fill" value if OverrideSwitch.On: "none" else "red" end file "../Simulation/plant.svg";
+svgout id "FO" attr "fill" value if BD.Motor.On: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vLock" attr "fill" value if LM.Valve.Lock: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vUnlock" attr "fill" value if LM.Valve.Unlock: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vClose" attr "fill" value if BD.Direction.Closing: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vOpen" attr "fill" value if BD.Direction.Opening: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vFast" attr "fill" value if BD.Speed.Fast: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vSlow" attr "fill" value if BD.Speed.Slow: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vPump" attr "fill" value if LM.Pump.On: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "vBrake" attr "fill" value if BR.Actuator.Release: "green" else "red" end file "../Simulation/plant.svg";
+svgout id "EmergencyStop" attr "visibility" value if EmergencyStop.Active: "visible" else "hidden" end file "../Simulation/UI.svg";
