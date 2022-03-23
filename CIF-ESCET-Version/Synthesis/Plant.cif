@@ -57,7 +57,7 @@ group StopSigns:
 end
 
 // Timers
-SSsOnTimer : .Timer(StopSigns.S1.On and StopSigns.S4.On);
+SSsOnTimer : Timer(StopSigns.S1.On and StopSigns.S4.On);
 
 group BB:
     plant L:
