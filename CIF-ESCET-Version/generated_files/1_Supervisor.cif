@@ -693,8 +693,8 @@ group sup:
     supervisor invariant .LM.Valve.c_unlock needs BridgeCommands.OpenB;
     supervisor invariant .BD.Direction.c_close needs BridgeCommands.CloseB;
     supervisor invariant .LM.Valve.c_lock needs BridgeCommands.CloseB;
-    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenB;
-    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenB;
+    supervisor invariant .BB1.Actuator.c_open needs BridgeCommands.OpenBB;
+    supervisor invariant .BB2.Actuator.c_open needs BridgeCommands.OpenBB;
     supervisor invariant .StopSigns.Actuator.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
     supervisor invariant .BB.L.c_off needs BridgeCommands.OpenLT or BridgeCommands.L10;
   end
